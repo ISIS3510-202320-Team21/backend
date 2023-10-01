@@ -16,6 +16,17 @@ def get_db():
     finally:
         db.close()
 
+#login functions
+
+@app.post("/login/", response_model=schemas.User) #
+def login_user(user: schemas.UserLogin, db: Session = Depends(get_db)):
+    db_user = crud.login_user(db, email=user.email, password=user.password)
+    if db_user is None:
+        raise HTTPException(status_code=404, detail="User not found")
+    elif db_user == "Wrong password":
+        raise HTTPException(status_code=404, detail="Wrong password")
+    return db_user
+
 #user functions
 @app.post("/users/", response_model=schemas.User) #
 def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):

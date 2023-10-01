@@ -84,6 +84,10 @@ class MatchCreate(MatchBase):
     pass
 
 #user model
+class UserLogin(BaseModel):
+    email: str
+    password: str
+
 class UserBase(BaseModel):
     email: str
     name: str
@@ -101,10 +105,6 @@ class User(UserBase):
     items: list[Item] = []
     image: Image = None
     notifications: list[Notification] = []
-    # matchesCreated: list[MatchBase] = []
-    # matchesJoined: list[MatchBase] = []
-    # matchesCreated: list[int] = []
-    # matchesJoined: list[int] = []
 
     class Config:
         orm_mode = True
@@ -112,13 +112,8 @@ class User(UserBase):
 class Match(MatchBase):
     id: int
     rate: str = None
-    # users: list[UserBase] = []
     user_created_id: int = None
     user_joined_id: int = None
-    # user_created: User = None
-    # user_joined: User = None
-    # sport: Sport = None
-    # level: Level = None
 
     class Config:
         orm_mode = True

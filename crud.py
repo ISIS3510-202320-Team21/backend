@@ -2,6 +2,24 @@ from sqlalchemy.orm import Session
 import models, schemas
 from sqlalchemy import or_
 
+
+#login functions
+def login_user(db: Session, email: str, password: str):
+    db_user = db.query(models.User).filter(models.User.email == email).first()
+    if db_user is None:
+        return None
+    if decode_password(db_user.hashed_password) == password:
+        return db_user
+    return "Wrong password"
+
+#encode password
+def encode_password(password: str):
+    return password + "notreallyhashed"
+
+#decode password
+def decode_password(password: str):
+    return password[:-15]
+
 #user functions
 def get_user(db: Session, user_id: int):
     return db.query(models.User).filter(models.User.id == user_id).first()
@@ -13,7 +31,7 @@ def get_users(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.User).offset(skip).limit(limit).all()
 
 def create_user(db: Session, user: schemas.UserCreate):
-    fake_hashed_password = user.password + "notreallyhashed"
+    fake_hashed_password = encode_password(user.password)
     db_user = models.User(email=user.email, name=user.name, phoneNumber=user.phoneNumber, role=user.role, bornDate=user.bornDate, gender=user.gender, hashed_password=fake_hashed_password)
     db.add(db_user)
     db.commit()
