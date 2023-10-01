@@ -71,7 +71,7 @@ class Notification(NotificationBase):
     class Config:
         orm_mode = True
 
-#create match model
+#match model
 class MatchBase(BaseModel):
     date: str
     time: str
@@ -81,16 +81,6 @@ class MatchBase(BaseModel):
 
 class MatchCreate(MatchBase):
     pass
-
-class Match(MatchBase):
-    id: int
-    sport_id: int
-    level_id: int
-    user1_id: int
-    user2_id: int
-
-    class Config:
-        orm_mode = True
 
 #user model
 class UserBase(BaseModel):
@@ -104,12 +94,22 @@ class UserBase(BaseModel):
 class UserCreate(UserBase):
     password: str
 
+#to manage concurrency
 class User(UserBase):
     id: int
     items: list[Item] = []
     image: list[Image] = []
     notifications: list[Notification] = []
-    matches: list[Match] = []
+    matches: list[MatchBase] = []
+
+    class Config:
+        orm_mode = True
+
+class Match(MatchBase):
+    id: int
+    sport_id: int
+    level_id: int
+    users: list[UserBase] = []
 
     class Config:
         orm_mode = True

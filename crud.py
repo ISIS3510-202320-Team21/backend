@@ -63,26 +63,28 @@ def create_user_notification(db: Session, notification: schemas.NotificationCrea
 def get_matches(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Match).offset(skip).limit(limit).all()
 
-def create_user_match(db: Session, match: schemas.MatchCreate, user_id: int):
-    db_match = models.Match(**match.dict(), user1_id=user_id)
+def create_match_for_user(db: Session, match: schemas.MatchCreate, user_id: int):
+    db_match = models.Match(**match.dict())
     db.add(db_match)
     db.commit()
     db.refresh(db_match)
+    db_user = db.query(models.User).filter(models.User.id == user_id).first()
+    db_user.matches.append(db_match)
+    db.commit()
+    db.refresh(db_user)
     return db_match
 
-def get_user_matches(db: Session, user_id: int):
-    return db.query(models.Match).filter(or_(models.Match.user1_id == user_id, models.Match.user2_id == user_id)).all()
+def add_user_to_match(db: Session, match_id: int, user_id: int):
+    db_match = db.query(models.Match).filter(models.Match.id == match_id).first()
+    db_user = db.query(models.User).filter(models.User.id == user_id).first()
+    db_match.users.append(db_user)
+    db.commit()
+    db.refresh(db_match)
+    return db_match
 
 def add_rate_to_match(db: Session, match_id: int, rate: str):
     db_match = db.query(models.Match).filter(models.Match.id == match_id).first()
     db_match.rate = rate
-    db.commit()
-    db.refresh(db_match)
-    return db_match
-
-def add_user2_to_match(db: Session, match_id: int, user_id: int):
-    db_match = db.query(models.Match).filter(models.Match.id == match_id).first()
-    db_match.user2_id = user_id
     db.commit()
     db.refresh(db_match)
     return db_match

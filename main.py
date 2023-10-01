@@ -84,19 +84,19 @@ def read_user_notifications(user_id: int, db: Session = Depends(get_db)):
 def create_match_for_user(
     user_id: int, match: schemas.MatchCreate, db: Session = Depends(get_db)
 ):
-    return crud.create_user_match(db=db, match=match, user_id=user_id)
+    return crud.create_match_for_user(db=db, match=match, user_id=user_id)
 
 @app.get("/matches/", response_model=list[schemas.Match])
 def read_matches(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     matches = crud.get_matches(db, skip=skip, limit=limit)
     return matches
 
-@app.get("/users/{user_id}/matches/", response_model=list[schemas.Match])
-def read_user_matches(user_id: int, db: Session = Depends(get_db)):
-    db_matches = crud.get_user_matches(db, user_id=user_id)
-    if db_matches is None:
-        raise HTTPException(status_code=404, detail="Matches not found")
-    return db_matches
+# @app.get("/users/{user_id}/matches/", response_model=list[schemas.Match])
+# def read_user_matches(user_id: int, db: Session = Depends(get_db)):
+#     db_matches = crud.get_user_matches(db, user_id=user_id)
+#     if db_matches is None:
+#         raise HTTPException(status_code=404, detail="Matches not found")
+#     return db_matches
 
 @app.put("/matches/{match_id}/rate/", response_model=schemas.Match)
 def update_match_rate(
@@ -104,11 +104,11 @@ def update_match_rate(
 ):
     return crud.add_rate_to_match(db=db, match_id=match_id, rate=rate)
 
-@app.put("/matches/{match_id}/user2/", response_model=schemas.Match)
-def update_match_user2(
+@app.put("/matches/{match_id}/users/{user_id}/", response_model=schemas.Match)
+def add_user_to_match(
     match_id: int, user_id: int, db: Session = Depends(get_db)
 ):
-    return crud.add_user2_to_match(db=db, match_id=match_id, user_id=user_id)
+    return crud.add_user_to_match(db=db, match_id=match_id, user_id=user_id)
 
 #sport functions
 @app.post("/sports/", response_model=schemas.Sport)

@@ -17,9 +17,11 @@ class User(Base):
     gender = Column(String, index=True)
 
     items = relationship("Item", back_populates="owner")
-    image = relationship("Image", back_populates="owner")
+    images = relationship("Image", back_populates="owner")
     notifications = relationship("Notification", back_populates="owner")
-    matches = relationship("Match", back_populates="user")
+    #matchesCreated = relationship("Match", back_populates="user1")
+    #matchesJoined = relationship("Match", back_populates="user2")
+    matches = relationship("Match", secondary="matches_users", back_populates="users")
 
 class Item(Base):
     __tablename__ = "items"
@@ -62,22 +64,34 @@ class Match(Base):
     place = Column(String, index=True)
     sport_id = Column(Integer, ForeignKey("sports.id"))
     level_id = Column(Integer, ForeignKey("levels.id"))
-    user1_id = Column(Integer, ForeignKey("users.id"))
-    user2_id = Column(Integer, ForeignKey("users.id"))
+    #user1_id = Column(Integer, ForeignKey("users.id"))
+    #user2_id = Column(Integer, ForeignKey("users.id"))
 
-    sport = relationship("Sport", back_populates="matches")
-    level = relationship("Level", back_populates="matches")
-    user1 = relationship("User", foreign_keys=[user1_id], back_populates="matches")
-    user2 = relationship("User", foreign_keys=[user2_id], back_populates="matches")
+    sport = relationship("Sport", back_populates="matches") #, back_populates="matches"
+    level = relationship("Level", back_populates="matches") #, back_populates="matches"
+    users = relationship("User", secondary="matches_users", back_populates="matches")
+    #user1 = relationship("User", foreign_keys=[user1_id], back_populates="matches")
+    #billing_address = relationship("Address", foreign_keys="[Customer.billing_address_id]")
+    #user1 = relationship("User", foreign_keys=[user1_id])
+    #user2 = relationship("User", foreign_keys=[user2_id])
+
+#create MatchUser
+class MatchUser(Base):
+    __tablename__ = "matches_users"
+
+    match_id = Column(Integer, ForeignKey("matches.id"), primary_key=True)
+    user_id = Column(Integer, ForeignKey("users.id"), primary_key=True)
 
 class Sport(Base):
     __tablename__ = "sports"
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, index=True)
+    matches = relationship("Match", back_populates="sport")
 
 class Level(Base):
     __tablename__ = "levels"
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, index=True)
+    matches = relationship("Match", back_populates="level")
