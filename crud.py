@@ -1,5 +1,6 @@
 from sqlalchemy.orm import Session
 import models, schemas
+from sqlalchemy import or_
 
 #user functions
 def get_user(db: Session, user_id: int):
@@ -68,6 +69,9 @@ def create_user_match(db: Session, match: schemas.MatchCreate, user_id: int):
     db.commit()
     db.refresh(db_match)
     return db_match
+
+def get_user_matches(db: Session, user_id: int):
+    return db.query(models.Match).filter(or_(models.Match.user1_id == user_id, models.Match.user2_id == user_id)).all()
 
 def add_rate_to_match(db: Session, match_id: int, rate: str):
     db_match = db.query(models.Match).filter(models.Match.id == match_id).first()
