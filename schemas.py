@@ -101,15 +101,24 @@ class User(UserBase):
     items: list[Item] = []
     image: Image = None
     notifications: list[Notification] = []
-    matches: list[MatchBase] = []
+    # matchesCreated: list[MatchBase] = []
+    # matchesJoined: list[MatchBase] = []
+    # matchesCreated: list[int] = []
+    # matchesJoined: list[int] = []
 
     class Config:
         orm_mode = True
 
 class Match(MatchBase):
     id: int
-    rate: str
-    users: list[UserBase] = []
+    rate: str = None
+    # users: list[UserBase] = []
+    user_created_id: int = None
+    user_joined_id: int = None
+    # user_created: User = None
+    # user_joined: User = None
+    # sport: Sport = None
+    # level: Level = None
 
     class Config:
         orm_mode = True

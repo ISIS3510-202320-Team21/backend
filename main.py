@@ -17,19 +17,19 @@ def get_db():
         db.close()
 
 #user functions
-@app.post("/users/", response_model=schemas.User)
+@app.post("/users/", response_model=schemas.User) #
 def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
     db_user = crud.get_user_by_email(db, email=user.email)
     if db_user:
         raise HTTPException(status_code=400, detail="Email already registered")
     return crud.create_user(db=db, user=user)
 
-@app.get("/users/", response_model=list[schemas.User])
+@app.get("/users/", response_model=list[schemas.User]) #
 def read_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     users = crud.get_users(db, skip=skip, limit=limit)
     return users
 
-@app.get("/users/{user_id}", response_model=schemas.User)
+@app.get("/users/{user_id}", response_model=schemas.User) #
 def read_user(user_id: int, db: Session = Depends(get_db)):
     db_user = crud.get_user(db, user_id=user_id)
     if db_user is None:
@@ -87,23 +87,30 @@ def read_user_notifications(user_id: int, db: Session = Depends(get_db)):
     return db_notifications
 
 #match functions
-@app.post("/users/{user_id}/matches/", response_model=schemas.Match)
+@app.post("/users/{user_id}/matches/") #, response_model=schemas.Match
 def create_match_for_user(
     user_id: int, match: schemas.MatchCreate, db: Session = Depends(get_db)
 ):
-    return crud.create_match_for_user(db=db, match=match, user_id=user_id)
+    return crud.create_user_match(db=db, match=match, user_id=user_id)
 
-@app.get("/matches/", response_model=list[schemas.Match])
+@app.get("/matches/", response_model=list[schemas.Match]) #, response_model=list[schemas.Match]
 def read_matches(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     matches = crud.get_matches(db, skip=skip, limit=limit)
     return matches
 
-# @app.get("/users/{user_id}/matches/", response_model=list[schemas.Match])
-# def read_user_matches(user_id: int, db: Session = Depends(get_db)):
-#     db_matches = crud.get_user_matches(db, user_id=user_id)
-#     if db_matches is None:
-#         raise HTTPException(status_code=404, detail="Matches not found")
-#     return db_matches
+@app.get("/users/{user_id}/matches/", response_model=list[schemas.Match])
+def read_user_matches(user_id: int, db: Session = Depends(get_db)):
+    db_matches = crud.get_user_matches(db, user_id=user_id)
+    if db_matches is None:
+        raise HTTPException(status_code=404, detail="Matches not found")
+    return db_matches
+
+@app.get("/matches/{match_id}", response_model=schemas.Match)
+def read_match(match_id: int, db: Session = Depends(get_db)):
+    db_match = crud.get_match(db, match_id=match_id)
+    if db_match is None:
+        raise HTTPException(status_code=404, detail="Match not found")
+    return db_match
 
 @app.put("/matches/{match_id}/rate/", response_model=schemas.Match)
 def update_match_rate(
@@ -111,7 +118,7 @@ def update_match_rate(
 ):
     return crud.add_rate_to_match(db=db, match_id=match_id, rate=rate)
 
-@app.put("/matches/{match_id}/users/{user_id}/", response_model=schemas.Match)
+@app.put("/matches/{match_id}/users/{user_id}/") #, response_model=schemas.Match
 def add_user_to_match(
     match_id: int, user_id: int, db: Session = Depends(get_db)
 ):

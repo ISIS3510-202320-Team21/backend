@@ -20,9 +20,10 @@ class User(Base):
     #images = relationship("Image", back_populates="owner")
     image = relationship("Image", uselist=False, backref="users")
     notifications = relationship("Notification", back_populates="owner")
-    #matchesCreated = relationship("Match", back_populates="user1")
-    #matchesJoined = relationship("Match", back_populates="user2")
-    matches = relationship("Match", secondary="matches_users", back_populates="users")
+
+    matchesCreated = relationship("Match", foreign_keys="[Match.user_created_id]", back_populates="user_created")
+    matchesJoined = relationship("Match", foreign_keys="[Match.user_joined_id]", back_populates="user_joined")
+    #matches = relationship("Match", secondary="matches_users", back_populates="users")
 
 class Item(Base):
     __tablename__ = "items"
@@ -41,8 +42,6 @@ class Image(Base):
     image = Column(String, index=True)
     owner_id = Column(Integer, ForeignKey("users.id"))
 
-    #owner = relationship("User", back_populates="images")
-
 class Notification(Base):
     __tablename__ = "notifications"
 
@@ -60,28 +59,28 @@ class Match(Base):
     id = Column(Integer, primary_key=True, index=True)
     date = Column(String, index=True)
     time = Column(String, index=True)
-    rate = Column(String, index=True, nullable=True)
+    rate = Column(String, index=True)
     status = Column(String, index=True)
     place = Column(String, index=True)
     sport_id = Column(Integer, ForeignKey("sports.id"))
     level_id = Column(Integer, ForeignKey("levels.id"))
-    #user1_id = Column(Integer, ForeignKey("users.id"))
-    #user2_id = Column(Integer, ForeignKey("users.id"))
+    user_created_id = Column(Integer, ForeignKey("users.id"))
+    user_joined_id = Column(Integer, ForeignKey("users.id"),nullable=True)
 
     sport = relationship("Sport", back_populates="matches") #, back_populates="matches"
     level = relationship("Level", back_populates="matches") #, back_populates="matches"
-    users = relationship("User", secondary="matches_users", back_populates="matches")
+    #users = relationship("User", secondary="matches_users", back_populates="matches")
     #user1 = relationship("User", foreign_keys=[user1_id], back_populates="matches")
     #billing_address = relationship("Address", foreign_keys="[Customer.billing_address_id]")
-    #user1 = relationship("User", foreign_keys=[user1_id])
-    #user2 = relationship("User", foreign_keys=[user2_id])
+    user_created = relationship("User", foreign_keys=[user_created_id], back_populates="matchesCreated")
+    user_joined = relationship("User", foreign_keys=[user_joined_id], back_populates="matchesJoined")
 
 #create MatchUser
-class MatchUser(Base):
-    __tablename__ = "matches_users"
+# class MatchUser(Base):
+#     __tablename__ = "matches_users"
 
-    match_id = Column(Integer, ForeignKey("matches.id"), primary_key=True)
-    user_id = Column(Integer, ForeignKey("users.id"), primary_key=True)
+#     match_id = Column(Integer, ForeignKey("matches.id"), primary_key=True)
+#     user_id = Column(Integer, ForeignKey("users.id"), primary_key=True)
 
 class Sport(Base):
     __tablename__ = "sports"
