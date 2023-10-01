@@ -12,11 +12,9 @@ def login_user(db: Session, email: str, password: str):
         return db_user
     return "Wrong password"
 
-#encode password
 def encode_password(password: str):
     return password + "notreallyhashed"
 
-#decode password
 def decode_password(password: str):
     return password[:-15]
 
@@ -100,30 +98,6 @@ def add_user_to_match(db: Session, match_id: int, user_id: int):
 
 def get_match(db: Session, match_id: int):
     return db.query(models.Match).filter(models.Match.id == match_id).first()
-
-# def create_match_for_user(db: Session, match: schemas.MatchCreate, user_id: int):
-#     db_match = models.Match(**match.dict())
-#     db.add(db_match)
-#     db.commit()
-#     db.refresh(db_match)
-#     print(db_match)
-#     db_user = db.query(models.User).filter(models.User.id == user_id).first()
-#     db_match.users.append(db_user)
-#     db.commit()
-#     db.refresh(db_match)
-#     db_user.matches.append(db_match)
-#     db.commit()
-#     db.refresh(db_user)
-#     print(db_match)
-#     return db_match
-
-# def add_user_to_match(db: Session, match_id: int, user_id: int):
-#     db_match = db.query(models.Match).filter(models.Match.id == match_id).first()
-#     db_user = db.query(models.User).filter(models.User.id == user_id).first()
-#     db_match.users.append(db_user)
-#     db.commit()
-#     db.refresh(db_match)
-#     return db_match
 
 def add_rate_to_match(db: Session, match_id: int, rate: str):
     db_match = db.query(models.Match).filter(models.Match.id == match_id).first()

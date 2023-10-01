@@ -17,13 +17,11 @@ class User(Base):
     gender = Column(String, index=True)
 
     items = relationship("Item", back_populates="owner")
-    #images = relationship("Image", back_populates="owner")
     image = relationship("Image", uselist=False, backref="users")
     notifications = relationship("Notification", back_populates="owner")
 
     matchesCreated = relationship("Match", foreign_keys="[Match.user_created_id]", back_populates="user_created")
     matchesJoined = relationship("Match", foreign_keys="[Match.user_joined_id]", back_populates="user_joined")
-    #matches = relationship("Match", secondary="matches_users", back_populates="users")
 
 class Item(Base):
     __tablename__ = "items"
@@ -67,20 +65,11 @@ class Match(Base):
     user_created_id = Column(Integer, ForeignKey("users.id"))
     user_joined_id = Column(Integer, ForeignKey("users.id"),nullable=True)
 
-    sport = relationship("Sport", back_populates="matches") #, back_populates="matches"
-    level = relationship("Level", back_populates="matches") #, back_populates="matches"
-    #users = relationship("User", secondary="matches_users", back_populates="matches")
-    #user1 = relationship("User", foreign_keys=[user1_id], back_populates="matches")
-    #billing_address = relationship("Address", foreign_keys="[Customer.billing_address_id]")
+    sport = relationship("Sport", back_populates="matches")
+    level = relationship("Level", back_populates="matches")
     user_created = relationship("User", foreign_keys=[user_created_id], back_populates="matchesCreated")
     user_joined = relationship("User", foreign_keys=[user_joined_id], back_populates="matchesJoined")
 
-#create MatchUser
-# class MatchUser(Base):
-#     __tablename__ = "matches_users"
-
-#     match_id = Column(Integer, ForeignKey("matches.id"), primary_key=True)
-#     user_id = Column(Integer, ForeignKey("users.id"), primary_key=True)
 
 class Sport(Base):
     __tablename__ = "sports"
