@@ -17,7 +17,8 @@ class User(Base):
     gender = Column(String, index=True)
 
     items = relationship("Item", back_populates="owner")
-    images = relationship("Image", back_populates="owner")
+    #images = relationship("Image", back_populates="owner")
+    image = relationship("Image", uselist=False, backref="users")
     notifications = relationship("Notification", back_populates="owner")
     #matchesCreated = relationship("Match", back_populates="user1")
     #matchesJoined = relationship("Match", back_populates="user2")
@@ -40,7 +41,7 @@ class Image(Base):
     image = Column(String, index=True)
     owner_id = Column(Integer, ForeignKey("users.id"))
 
-    owner = relationship("User", back_populates="images")
+    #owner = relationship("User", back_populates="images")
 
 class Notification(Base):
     __tablename__ = "notifications"
@@ -59,7 +60,7 @@ class Match(Base):
     id = Column(Integer, primary_key=True, index=True)
     date = Column(String, index=True)
     time = Column(String, index=True)
-    rate = Column(String, index=True)
+    rate = Column(String, index=True, nullable=True)
     status = Column(String, index=True)
     place = Column(String, index=True)
     sport_id = Column(Integer, ForeignKey("sports.id"))

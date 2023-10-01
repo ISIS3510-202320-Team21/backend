@@ -75,9 +75,10 @@ class Notification(NotificationBase):
 class MatchBase(BaseModel):
     date: str
     time: str
-    rate: str
     status: str
     place: str
+    sport_id: int
+    level_id: int
 
 class MatchCreate(MatchBase):
     pass
@@ -98,7 +99,7 @@ class UserCreate(UserBase):
 class User(UserBase):
     id: int
     items: list[Item] = []
-    image: list[Image] = []
+    image: Image = None
     notifications: list[Notification] = []
     matches: list[MatchBase] = []
 
@@ -107,8 +108,7 @@ class User(UserBase):
 
 class Match(MatchBase):
     id: int
-    sport_id: int
-    level_id: int
+    rate: str
     users: list[UserBase] = []
 
     class Config:

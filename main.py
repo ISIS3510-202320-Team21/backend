@@ -60,6 +60,13 @@ def read_images(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     images = crud.get_images(db, skip=skip, limit=limit)
     return images
 
+@app.get("/users/{user_id}/images/", response_model=schemas.Image)
+def read_user_image(user_id: int, db: Session = Depends(get_db)):
+    db_image = crud.get_user_image(db, user_id=user_id)
+    if db_image is None:
+        raise HTTPException(status_code=404, detail="Image not found")
+    return db_image
+
 #notification functions
 @app.post("/users/{user_id}/notifications/", response_model=schemas.Notification)
 def create_notification_for_user(
