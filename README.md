@@ -18,3 +18,9 @@ psql -U postgres
 postgres# CREATE DATABASE sportpal_db OWNER postgres;
 postgres# ALTER USER postgres WITH PASSWORD '1234';
 ```
+
+To launche the app go to the root folder and use:
+
+```
+uvicorn main:app --reload
+```
