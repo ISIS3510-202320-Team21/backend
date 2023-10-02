@@ -15,7 +15,6 @@ The postgres database name for default is sportpal_db, the username is postgres 
 
 ```
 psql -U postgres
-postgres# CREATE USER postgres;
 postgres# CREATE DATABASE sportpal_db OWNER postgres;
 postgres# ALTER USER postgres WITH PASSWORD '1234';
 ```
