@@ -630,6 +630,45 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Change status match",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/matches/1/status?status=Finished",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"matches",
+						"1",
+						"status"
+					],
+					"query": [
+						{
+							"key": "status",
+							"value": "Finished"
+						}
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }

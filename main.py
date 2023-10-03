@@ -142,6 +142,12 @@ def add_user_to_match(
 ):
     return crud.add_user_to_match(db=db, match_id=match_id, user_id=user_id)
 
+@app.put("/matches/{match_id}/status/", response_model=schemas.Match)
+def change_match_status(
+    match_id: int, status: str, db: Session = Depends(get_db)
+):
+    return crud.change_match_status(db=db, match_id=match_id, status=status)
+
 #sport functions
 @app.post("/sports/", response_model=schemas.Sport)
 def create_sport(sport: schemas.SportCreate, db: Session = Depends(get_db)):
