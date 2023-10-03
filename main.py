@@ -97,6 +97,13 @@ def read_user_notifications(user_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Notifications not found")
     return db_notifications
 
+@app.put("/notifications/{notification_id}/", response_model=schemas.Notification)
+def update_notification(notification_id: int, db: Session = Depends(get_db)):
+    db_notification = crud.update_notification(db, notification_id=notification_id)
+    if db_notification is None:
+        raise HTTPException(status_code=404, detail="Notification not found")
+    return db_notification
+
 #match functions
 @app.post("/users/{user_id}/matches/") #, response_model=schemas.Match
 def create_match_for_user(

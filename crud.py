@@ -85,6 +85,13 @@ def create_user_notification(db: Session, notification: schemas.NotificationCrea
     db.refresh(db_notification)
     return db_notification
 
+def update_notification(db: Session, notification_id: int):
+    db_notification = db.query(models.Notification).filter(models.Notification.id == notification_id).first()
+    db_notification.seen = True
+    db.commit()
+    db.refresh(db_notification)
+    return db_notification
+
 #match functions
 def get_matches(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Match).offset(skip).limit(limit).all()
