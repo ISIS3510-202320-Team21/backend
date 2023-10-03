@@ -77,7 +77,9 @@ def get_user_notifications(db: Session, user_id: int):
     return db.query(models.Notification).filter(models.Notification.owner_id == user_id).all()
 
 def create_user_notification(db: Session, notification: schemas.NotificationCreate, user_id: int):
-    db_notification = models.Notification(**notification.dict(), owner_id=user_id)
+    creationDate = datetime.datetime.now()
+    seen = False
+    db_notification = models.Notification(**notification.dict(), owner_id=user_id, creationDate=creationDate, seen=seen)
     db.add(db_notification)
     db.commit()
     db.refresh(db_notification)

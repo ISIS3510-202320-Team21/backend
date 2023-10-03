@@ -66,6 +66,8 @@ class NotificationCreate(NotificationBase):
 
 class Notification(NotificationBase):
     id: int
+    seen: bool
+    creationDate: str
     owner_id: int
 
     class Config:

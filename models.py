@@ -48,6 +48,8 @@ class Notification(Base):
     name = Column(String, index=True)
     type = Column(String, index=True)
     redirectTo = Column(String, index=True)
+    seen = Column(Boolean, index=True)
+    creationDate = Column(String, index=True)
     owner_id = Column(Integer, ForeignKey("users.id"))
 
     owner = relationship("User", back_populates="notifications")
