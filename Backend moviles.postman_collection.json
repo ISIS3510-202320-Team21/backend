@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "db64fac1-4b91-4894-a3b2-c81f922b593e",
-		"name": "Back Moviles",
+		"name": "Backend moviles",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -394,7 +394,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"date\":\"01/01/2000\",\n    \"time\":\"11:00-13:00\",\n    \"status\":\"Waiting\",\n    \"rate\":\"1\",\n    \"court\":\"Centro de Deportes\",\n    \"city\":\"Bogotá\",\n    \"sport_id\":1,\n    \"level_id\":1\n}",
+					"raw": "{\n    \"date\":\"01/01/2000\",\n    \"time\":\"11:00-13:00\",\n    \"status\":\"Waiting\",\n    \"court\":\"Centro de Deportes\",\n    \"city\":\"Bogotá\",\n    \"sport_id\":1,\n    \"level_id\":1\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -555,6 +555,45 @@
 						"1",
 						"matches",
 						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Rate match",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/matches/1/rate?rate=1",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"matches",
+						"1",
+						"rate"
+					],
+					"query": [
+						{
+							"key": "rate",
+							"value": "1"
+						}
 					]
 				}
 			},
