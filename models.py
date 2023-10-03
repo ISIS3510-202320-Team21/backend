@@ -38,7 +38,7 @@ class Image(Base):
     __tablename__ = "images"
 
     id = Column(Integer, primary_key=True, index=True)
-    image = Column(String, index=True)
+    imageUrl = Column(String, index=True)
     owner_id = Column(Integer, ForeignKey("users.id"))
 
 class Notification(Base):
@@ -81,6 +81,7 @@ class Sport(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, index=True)
+    imageUrl = Column(String, index=True)
     matches = relationship("Match", back_populates="sport")
 
 class Level(Base):

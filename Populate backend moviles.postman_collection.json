@@ -149,7 +149,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"name\":\"Tennis\"\n}",
+					"raw": "{\n    \"name\":\"Tennis\",\n    \"imageUrl\":\"url\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -191,7 +191,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"name\":\"Football\"\n}",
+					"raw": "{\n    \"name\":\"Football\",\n    \"imageUrl\":\"url\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -233,7 +233,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"name\":\"Squash\"\n}",
+					"raw": "{\n    \"name\":\"Squash\",\n    \"imageUrl\":\"url\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"

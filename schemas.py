@@ -18,6 +18,7 @@ class Item(ItemBase):
 #create sport model
 class SportBase(BaseModel):
     name: str
+    imageUrl: str
 
 class SportCreate(SportBase):
     pass
@@ -43,7 +44,7 @@ class Level(LevelBase):
 
 #create image model
 class ImageBase(BaseModel):
-    image: str
+    imageUrl: str
 
 class ImageCreate(ImageBase):
     pass
