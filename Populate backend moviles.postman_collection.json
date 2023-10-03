@@ -274,7 +274,7 @@
 					"script": {
 						"exec": [
 							"var data = JSON.parse(responseBody);",
-							"postman.setGlobalVariable(\"newestUserId\",data.id);",
+							"pm.globals.set(\"newestUserId\",data.id);",
 							"tests[\"No genera error\"] = responseCode.code === 200;"
 						],
 						"type": "text/javascript"

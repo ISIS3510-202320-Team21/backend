@@ -319,6 +319,38 @@
 			"response": []
 		},
 		{
+			"name": "Update notification",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/notifications/1",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"notifications",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Create image for user",
 			"request": {
 				"method": "POST",
