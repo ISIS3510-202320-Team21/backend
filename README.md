@@ -22,5 +22,5 @@ postgres# ALTER USER postgres WITH PASSWORD '1234';
 To launch the app go to the root folder and use:
 
 ```
-uvicorn main:app --reload
+python main.py
 ```
