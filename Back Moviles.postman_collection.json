@@ -12,7 +12,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"email\":\"ana@gmail.com\",\n    \"password\":\"password\",\n    \"name\":\"Ana\",\n    \"phoneNumber\":\"1234567890\",\n    \"role\":\"Estudiante\",\n    \"bornDate\":\"01/01/2000\",\n    \"gender\":\"F\"\n}",
+					"raw": "{\n    \"email\":\"ana@gmail.com\",\n    \"password\":\"password\",\n    \"name\":\"Ana\",\n    \"phoneNumber\":\"1234567890\",\n    \"role\":\"Estudiante\",\n    \"university\":\"Universidad de los Andes\",\n    \"bornDate\":\"01/01/2000\",\n    \"gender\":\"F\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -43,7 +43,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"email\":\"maria@gmail.com\",\n    \"password\":\"password\",\n    \"name\":\"Maria\",\n    \"phoneNumber\":\"1234567890\",\n    \"role\":\"Estudiante\",\n    \"bornDate\":\"01/01/2000\",\n    \"gender\":\"F\"\n}",
+					"raw": "{\n    \"email\":\"maria@gmail.com\",\n    \"password\":\"password\",\n    \"name\":\"Maria\",\n    \"phoneNumber\":\"1234567890\",\n    \"role\":\"Estudiante\",\n    \"university\":\"Universidad de los Andes\",\n    \"bornDate\":\"01/01/2000\",\n    \"gender\":\"F\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -394,7 +394,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"date\":\"01/01/2000\",\n    \"time\":\"11:00-13:00\",\n    \"status\":\"Waiting\",\n    \"rate\":\"1\",\n    \"place\":\"Centro de Deportes\",\n    \"sport_id\":1,\n    \"level_id\":1\n}",
+					"raw": "{\n    \"date\":\"01/01/2000\",\n    \"time\":\"11:00-13:00\",\n    \"status\":\"Waiting\",\n    \"rate\":\"1\",\n    \"court\":\"Centro de Deportes\",\n    \"city\":\"Bogotá\",\n    \"sport_id\":1,\n    \"level_id\":1\n}",
 					"options": {
 						"raw": {
 							"language": "json"

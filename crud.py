@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 import models, schemas
 from sqlalchemy import or_
-
+import datetime
 
 #login functions
 def login_user(db: Session, email: str, password: str):
@@ -30,7 +30,15 @@ def get_users(db: Session, skip: int = 0, limit: int = 100):
 
 def create_user(db: Session, user: schemas.UserCreate):
     fake_hashed_password = encode_password(user.password)
-    db_user = models.User(email=user.email, name=user.name, phoneNumber=user.phoneNumber, role=user.role, bornDate=user.bornDate, gender=user.gender, hashed_password=fake_hashed_password)
+    db_user = models.User(
+        email=user.email,
+        name=user.name,
+        phoneNumber=user.phoneNumber,
+        role=user.role,
+        bornDate=user.bornDate,
+        gender=user.gender,
+        hashed_password=fake_hashed_password,
+        university=user.university)
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
@@ -80,7 +88,8 @@ def get_matches(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Match).offset(skip).limit(limit).all()
 
 def create_user_match(db: Session, match: schemas.MatchCreate, user_id: int):
-    db_match = models.Match(**match.dict(), user_created_id=user_id)
+    creationDate = datetime.datetime.now()
+    db_match = models.Match(**match.dict(), user_created_id=user_id, creationDate=creationDate)
     db.add(db_match)
     db.commit()
     db.refresh(db_match)

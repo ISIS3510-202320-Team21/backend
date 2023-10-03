@@ -76,7 +76,8 @@ class MatchBase(BaseModel):
     date: str
     time: str
     status: str
-    place: str
+    court: str
+    city: str
     sport_id: int
     level_id: int
 
@@ -93,6 +94,7 @@ class UserBase(BaseModel):
     name: str
     phoneNumber: str
     role: str
+    university: str
     bornDate: str
     gender: str
 
@@ -111,6 +113,7 @@ class User(UserBase):
 
 class Match(MatchBase):
     id: int
+    creationDate: str = None
     rate: str = None
     user_created_id: int = None
     user_joined_id: int = None

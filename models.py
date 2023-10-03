@@ -13,6 +13,7 @@ class User(Base):
     name = Column(String, index=True)
     phoneNumber = Column(String, index=True)
     role = Column(String, index=True)
+    university = Column(String, index=True)
     bornDate = Column(String, index=True)
     gender = Column(String, index=True)
 
@@ -59,7 +60,9 @@ class Match(Base):
     time = Column(String, index=True)
     rate = Column(String, index=True)
     status = Column(String, index=True)
-    place = Column(String, index=True)
+    court = Column(String, index=True)
+    city = Column(String, index=True)
+    creationDate = Column(String, index=True)
     sport_id = Column(Integer, ForeignKey("sports.id"))
     level_id = Column(Integer, ForeignKey("levels.id"))
     user_created_id = Column(Integer, ForeignKey("users.id"))
