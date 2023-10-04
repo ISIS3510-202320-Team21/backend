@@ -15,22 +15,11 @@ class User(Base):
     bornDate = Column(String, index=True)
     gender = Column(String, index=True)
 
-    items = relationship("Item", back_populates="owner")
     image = relationship("Image", uselist=False, backref="users")
     notifications = relationship("Notification", back_populates="owner")
 
     matchesCreated = relationship("Match", foreign_keys="[Match.user_created_id]", back_populates="user_created")
     matchesJoined = relationship("Match", foreign_keys="[Match.user_joined_id]", back_populates="user_joined")
-
-class Item(Base):
-    __tablename__ = "items"
-
-    id = Column(Integer, primary_key=True, index=True)
-    title = Column(String, index=True)
-    description = Column(String, index=True)
-    owner_id = Column(Integer, ForeignKey("users.id"))
-
-    owner = relationship("User", back_populates="items")
 
 class Image(Base):
     __tablename__ = "images"

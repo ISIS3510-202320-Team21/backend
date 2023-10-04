@@ -54,18 +54,6 @@ def read_user(user_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="User not found")
     return db_user
 
-#item functions
-@app.post("/users/{user_id}/items/", response_model=schemas.Item)
-def create_item_for_user(
-    user_id: int, item: schemas.ItemCreate, db: Session = Depends(get_db)
-):
-    return controllers.create_user_item(db=db, item=item, user_id=user_id)
-
-@app.get("/items/", response_model=list[schemas.Item])
-def read_items(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    items = controllers.get_items(db, skip=skip, limit=limit)
-    return items
-
 #image functions
 @app.post("/users/{user_id}/images/", response_model=schemas.Image)
 def create_image_for_user(

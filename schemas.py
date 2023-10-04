@@ -1,20 +1,6 @@
 from typing import Union
 from pydantic import BaseModel
 
-class ItemBase(BaseModel):
-    title: str
-    description: Union[str, None] = None
-
-class ItemCreate(ItemBase):
-    pass
-
-class Item(ItemBase):
-    id: int
-    owner_id: int
-
-    class Config:
-        orm_mode = True
-
 #create sport model
 class SportBase(BaseModel):
     name: str
@@ -107,7 +93,6 @@ class UserCreate(UserBase):
 #to manage concurrency
 class User(UserBase):
     id: int
-    items: list[Item] = []
     image: Image = None
     notifications: list[Notification] = []
 
