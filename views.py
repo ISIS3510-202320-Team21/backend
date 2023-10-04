@@ -54,24 +54,12 @@ def read_user(user_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="User not found")
     return db_user
 
-#image functions
-@app.post("/users/{user_id}/images/", response_model=schemas.Image)
-def create_image_for_user(
-    user_id: int, image: schemas.ImageCreate, db: Session = Depends(get_db)
-):
-    return controllers.create_user_image(db=db, image=image, user_id=user_id)
-
-@app.get("/images/", response_model=list[schemas.Image])
-def read_images(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    images = controllers.get_images(db, skip=skip, limit=limit)
-    return images
-
-@app.get("/users/{user_id}/images/", response_model=schemas.Image)
-def read_user_image(user_id: int, db: Session = Depends(get_db)):
-    db_image = controllers.get_user_image(db, user_id=user_id)
-    if db_image is None:
-        raise HTTPException(status_code=404, detail="Image not found")
-    return db_image
+@app.post("/users/{user_id}/image/", response_model=schemas.User) #
+def update_user_image(image: schemas.ImageCreate, user_id: int, db: Session = Depends(get_db)):
+    db_user = controllers.update_user_image(db, user_id=user_id, image=image)
+    if db_user is None:
+        raise HTTPException(status_code=404, detail="User not found")
+    return db_user
 
 #notification functions
 @app.post("/users/{user_id}/notifications/", response_model=schemas.Notification)

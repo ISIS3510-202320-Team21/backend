@@ -28,20 +28,6 @@ class Level(LevelBase):
     class Config:
         orm_mode = True
 
-#create image model
-class ImageBase(BaseModel):
-    imageUrl: str
-
-class ImageCreate(ImageBase):
-    pass
-
-class Image(ImageBase):
-    id: int
-    owner_id: int
-
-    class Config:
-        orm_mode = True
-
 #create notification model
 class NotificationBase(BaseModel):
     name: str
@@ -90,10 +76,13 @@ class UserBase(BaseModel):
 class UserCreate(UserBase):
     password: str
 
+class ImageCreate(BaseModel):
+    imageUrl: str
+
 #to manage concurrency
 class User(UserBase):
     id: int
-    image: Image = None
+    imageUrl: str = None
     notifications: list[Notification] = []
 
     class Config:

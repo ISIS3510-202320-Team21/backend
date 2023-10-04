@@ -44,19 +44,12 @@ def create_user(db: Session, user: schemas.UserCreate):
     db.refresh(db_user)
     return db_user
 
-#image functions
-def get_images(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(models.Image).offset(skip).limit(limit).all()
-
-def get_user_image(db: Session, user_id: int):
-    return db.query(models.Image).filter(models.Image.owner_id == user_id).first()
-
-def create_user_image(db: Session, image: schemas.ImageCreate, user_id: int):
-    db_image = models.Image(**image.dict(), owner_id=user_id)
-    db.add(db_image)
+def update_user_image(db: Session, user_id: int, image: schemas.ImageCreate):
+    db_user = db.query(models.User).filter(models.User.id == user_id).first()
+    db_user.imageUrl = image.imageUrl
     db.commit()
-    db.refresh(db_image)
-    return db_image
+    db.refresh(db_user)
+    return db_user
 
 #notification functions
 def get_notifications(db: Session, skip: int = 0, limit: int = 100):

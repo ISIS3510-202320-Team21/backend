@@ -68,6 +68,39 @@
 			"response": []
 		},
 		{
+			"name": "Add image to user",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"imageUrl\":\"url\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/users/1/image",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"users",
+						"1",
+						"image"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Login",
 			"request": {
 				"method": "POST",
@@ -345,75 +378,6 @@
 					"path": [
 						"notifications",
 						"1"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Create image for user",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"imageUrl\":\"url\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://127.0.0.1:8000/users/1/images",
-					"protocol": "http",
-					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
-					],
-					"port": "8000",
-					"path": [
-						"users",
-						"1",
-						"images"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Get user image",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"method": "GET",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://127.0.0.1:8000/users/1/images",
-					"protocol": "http",
-					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
-					],
-					"port": "8000",
-					"path": [
-						"users",
-						"1",
-						"images"
 					]
 				}
 			},

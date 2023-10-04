@@ -14,19 +14,12 @@ class User(Base):
     university = Column(String, index=True)
     bornDate = Column(String, index=True)
     gender = Column(String, index=True)
+    imageUrl = Column(String, index=True, nullable=True)
 
-    image = relationship("Image", uselist=False, backref="users")
     notifications = relationship("Notification", back_populates="owner")
 
     matchesCreated = relationship("Match", foreign_keys="[Match.user_created_id]", back_populates="user_created")
     matchesJoined = relationship("Match", foreign_keys="[Match.user_joined_id]", back_populates="user_joined")
-
-class Image(Base):
-    __tablename__ = "images"
-
-    id = Column(Integer, primary_key=True, index=True)
-    imageUrl = Column(String, index=True)
-    owner_id = Column(Integer, ForeignKey("users.id"))
 
 class Notification(Base):
     __tablename__ = "notifications"
