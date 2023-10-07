@@ -83,6 +83,8 @@ class ImageCreate(BaseModel):
 class User(UserBase):
     id: int
     imageUrl: str = None
+    latitude: str = None
+    longitude: str = None
     notifications: list[Notification] = []
 
     class Config:

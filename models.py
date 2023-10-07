@@ -15,6 +15,8 @@ class User(Base):
     bornDate = Column(String, index=True)
     gender = Column(String, index=True)
     imageUrl = Column(String, index=True, nullable=True)
+    latitude = Column(String, index=True, nullable=True)
+    longitude = Column(String, index=True, nullable=True)
 
     notifications = relationship("Notification", back_populates="owner")
 

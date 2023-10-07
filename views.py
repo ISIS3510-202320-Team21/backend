@@ -61,6 +61,13 @@ def update_user_image(image: schemas.ImageCreate, user_id: int, db: Session = De
         raise HTTPException(status_code=404, detail="User not found")
     return db_user
 
+@app.put("/users/{user_id}/location/", response_model=schemas.User) #
+def update_user_location(latitude: str, longitude: str, user_id: int, db: Session = Depends(get_db)):
+    db_user = controllers.update_user_location(db, user_id=user_id, latitude=latitude, longitude=longitude)
+    if db_user is None:
+        raise HTTPException(status_code=404, detail="User not found")
+    return db_user
+
 #notification functions
 @app.post("/users/{user_id}/notifications/", response_model=schemas.Notification)
 def create_notification_for_user(

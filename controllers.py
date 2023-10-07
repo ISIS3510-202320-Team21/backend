@@ -51,6 +51,14 @@ def update_user_image(db: Session, user_id: int, image: schemas.ImageCreate):
     db.refresh(db_user)
     return db_user
 
+def update_user_location(db: Session, user_id: int, latitude: str, longitude: str):
+    db_user = db.query(models.User).filter(models.User.id == user_id).first()
+    db_user.latitude = latitude
+    db_user.longitude = longitude
+    db.commit()
+    db.refresh(db_user)
+    return db_user
+
 #notification functions
 def get_notifications(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Notification).offset(skip).limit(limit).all()

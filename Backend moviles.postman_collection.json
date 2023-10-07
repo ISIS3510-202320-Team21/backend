@@ -177,6 +177,50 @@
 			"response": []
 		},
 		{
+			"name": "Update user location",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/users/1/location/?latitude=1.2&longitude=2.3",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"users",
+						"1",
+						"location",
+						""
+					],
+					"query": [
+						{
+							"key": "latitude",
+							"value": "1.2"
+						},
+						{
+							"key": "longitude",
+							"value": "2.3"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Create level",
 			"request": {
 				"method": "POST",
