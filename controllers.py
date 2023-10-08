@@ -143,3 +143,19 @@ def create_level(db: Session, level: schemas.LevelCreate):
     db.commit()
     db.refresh(db_level)
     return db_level
+
+#get universities, this is a list of strings fixed in the code
+def get_universities():
+    return ["Universidad de los Andes", "Universidad Nacional", "Pontificia Universidad Javeriana", "Universidad del Rosario", "Universidad Externado", "Universidad de la Sabana", "Universidad Sergio Arboleda", "Universidad de la Salle", "Universidad del Bosque", "Other"]
+
+#get roles, this is a list of strings fixed in the code
+def get_roles():
+    return ["Student", "Professor", "Graduated", "Other"]
+
+#get genders, this is a list of strings fixed in the code
+def get_genders():
+    return ["Male","Female","Other"]
+
+#get cities, this is a list of strings fixed in the code
+def get_cities():
+    return ["Bogotá","Medellín","Cali","Barranquilla","Cartagena","Cúcuta","Soledad","Ibagué","Bucaramanga","Soacha","Santa Marta","Villavicencio","Bello","Valledupar","Pereira","Montería","Pasto","Manizales"]

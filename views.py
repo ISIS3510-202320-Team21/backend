@@ -157,3 +157,27 @@ def create_level(level: schemas.LevelCreate, db: Session = Depends(get_db)):
 def read_levels(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     levels = controllers.get_levels(db, skip=skip, limit=limit)
     return levels
+
+#university functions
+@app.get("/universities/", response_model=list[str])
+def read_universities(db: Session = Depends(get_db)):
+    universities = controllers.get_universities()
+    return universities
+
+#city functions
+@app.get("/cities/", response_model=list[str])
+def read_cities(db: Session = Depends(get_db)):
+    cities = controllers.get_cities()
+    return cities
+
+#gender functions
+@app.get("/genders/", response_model=list[str])
+def read_genders(db: Session = Depends(get_db)):
+    cities = controllers.get_genders()
+    return cities
+
+#get roles
+@app.get("/roles/", response_model=list[str])
+def read_roles(db: Session = Depends(get_db)):
+    roles = controllers.get_roles()
+    return roles
