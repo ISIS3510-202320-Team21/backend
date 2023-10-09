@@ -53,11 +53,10 @@ class MatchBase(BaseModel):
     status: str
     court: str
     city: str
-    sport_id: int
-    level_id: int
 
 class MatchCreate(MatchBase):
-    pass
+    sport_id: int
+    level_id: int
 
 #user model
 class UserLogin(BaseModel):
@@ -95,7 +94,9 @@ class Match(MatchBase):
     creationDate: str = None
     rate: str = None
     user_created_id: int = None
-    user_joined_id: int = None
+    sport: Sport = None
+    level: Level = None
+    user_joined: User = None
 
     class Config:
         orm_mode = True
