@@ -59,6 +59,28 @@ def update_user_location(db: Session, user_id: int, latitude: str, longitude: st
     db.refresh(db_user)
     return db_user
 
+def update_user(db: Session, user_id: int, user: schemas.UserBase):
+    db_user = db.query(models.User).filter(models.User.id == user_id).first()
+    db_user.email = user.email
+    db_user.name = user.name
+    db_user.phoneNumber = user.phoneNumber
+    db_user.role = user.role
+    db_user.university = user.university
+    db_user.bornDate = user.bornDate
+    db_user.gender = user.gender
+    db.commit()
+    db.refresh(db_user)
+    return db_user
+
+def change_password(db: Session, user_id: int, old_password: str, new_password: str):
+    db_user = db.query(models.User).filter(models.User.id == user_id).first()
+    if decode_password(db_user.hashed_password) == old_password:
+        db_user.hashed_password = encode_password(new_password)
+        db.commit()
+        db.refresh(db_user)
+        return db_user
+    return "Wrong password"
+
 #notification functions
 def get_notifications(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Notification).offset(skip).limit(limit).all()

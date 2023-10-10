@@ -54,6 +54,22 @@ def read_user(user_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="User not found")
     return db_user
 
+@app.put("/users/{user_id}/", response_model=schemas.User) #
+def update_user(user: schemas.UserBase, user_id: int, db: Session = Depends(get_db)):
+    db_user = controllers.update_user(db, user_id=user_id, user=user)
+    if db_user is None:
+        raise HTTPException(status_code=404, detail="User not found")
+    return db_user
+
+@app.put("/users/{user_id}/password/", response_model=schemas.User) #
+def change_password(old_password: str, new_password: str, user_id: int, db: Session = Depends(get_db)):
+    db_user = controllers.change_password(db, user_id=user_id, old_password=old_password, new_password=new_password)
+    if db_user is None:
+        raise HTTPException(status_code=404, detail="User not found")
+    elif db_user == "Wrong password":
+        raise HTTPException(status_code=404, detail="Wrong password")
+    return db_user
+
 @app.post("/users/{user_id}/image/", response_model=schemas.User) #
 def update_user_image(image: schemas.ImageCreate, user_id: int, db: Session = Depends(get_db)):
     db_user = controllers.update_user_image(db, user_id=user_id, image=image)
