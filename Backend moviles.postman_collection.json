@@ -221,6 +221,74 @@
 			"response": []
 		},
 		{
+			"name": "Update user info",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\":\"ana@gmail.com\",\n    \"name\":\"Ana\",\n    \"phoneNumber\":\"1234567890\",\n    \"role\":\"Estudiante\",\n    \"university\":\"Universidad de los Andes\",\n    \"bornDate\":\"01/01/2000\",\n    \"gender\":\"F\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/users/1/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"users",
+						"1",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Change password",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/users/1/password/?old_password=password&new_password=password123",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"users",
+						"1",
+						"password",
+						""
+					],
+					"query": [
+						{
+							"key": "old_password",
+							"value": "password"
+						},
+						{
+							"key": "new_password",
+							"value": "password123"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Create level",
 			"request": {
 				"method": "POST",
