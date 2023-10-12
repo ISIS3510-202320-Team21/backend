@@ -1,8 +1,9 @@
 {
 	"info": {
-		"_postman_id": "2933b91c-0af1-42f7-afe4-bdf7a32ef823",
+		"_postman_id": "296d6a79-f28b-46ec-9435-e83ee8a0721e",
 		"name": "Populate backend moviles",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24301889"
 	},
 	"item": [
 		{
@@ -149,7 +150,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"name\":\"Tennis\",\n    \"imageUrl\":\"url\"\n}",
+					"raw": "{\n    \"name\":\"Tennis\",\n    \"imageUrl\":\"https://raw.githubusercontent.com/BraitoRX/I-Like-Data/main/sportsapp/tenis.png\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -174,7 +175,7 @@
 			"response": []
 		},
 		{
-			"name": "Create sport football",
+			"name": "Create sport chess",
 			"event": [
 				{
 					"listen": "test",
@@ -191,7 +192,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"name\":\"Football\",\n    \"imageUrl\":\"url\"\n}",
+					"raw": "{\n    \"name\":\"Chess\",\n    \"imageUrl\":\"https://raw.githubusercontent.com/BraitoRX/I-Like-Data/main/sportsapp/chess.png\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -216,7 +217,7 @@
 			"response": []
 		},
 		{
-			"name": "Create sport squash",
+			"name": "Create sport Volleyball",
 			"event": [
 				{
 					"listen": "test",
@@ -233,7 +234,91 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"name\":\"Squash\",\n    \"imageUrl\":\"url\"\n}",
+					"raw": "{\n    \"name\":\"Volleyball\",\n    \"imageUrl\":\"https://raw.githubusercontent.com/BraitoRX/I-Like-Data/main/sportsapp/volley.png\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/sports",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"sports"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create sport Billiards",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"tests[\"No genera error\"] = responseCode.code === 200;"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\":\"Billiards\",\n    \"imageUrl\":\"https://raw.githubusercontent.com/BraitoRX/I-Like-Data/main/sportsapp/billar.png\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/sports",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"sports"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create sport Basketball",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"tests[\"No genera error\"] = responseCode.code === 200;"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\":\"Basketball\",\n    \"imageUrl\":\"https://raw.githubusercontent.com/BraitoRX/I-Like-Data/main/sportsapp/basket.png\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
