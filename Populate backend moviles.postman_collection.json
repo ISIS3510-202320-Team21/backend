@@ -7,6 +7,37 @@
 	},
 	"item": [
 		{
+			"name": "Create user",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\":\"j@j.com\",\n    \"password\":\"1\",\n    \"name\":\"Braito\",\n    \"phoneNumber\":\"1234567890\",\n    \"role\":\"Estudiante\",\n    \"university\":\"Universidad de los Andes\",\n    \"bornDate\":\"01/01/2000\",\n    \"gender\":\"F\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/users",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Create level beginner",
 			"event": [
 				{
