@@ -122,7 +122,7 @@ def get_user_matches(db: Session, user_id: int):
 def add_user_to_match(db: Session, match_id: int, user_id: int):
     db_match = db.query(models.Match).filter(models.Match.id == match_id).first()
     db_match.user_joined_id = user_id
-    db_match.status = "Joined"
+    db_match.status = "Approved"
     db.commit()
     db.refresh(db_match)
     return db_match

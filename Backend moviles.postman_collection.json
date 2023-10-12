@@ -502,7 +502,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"date\":\"01/01/2000\",\n    \"time\":\"11:00-13:00\",\n    \"status\":\"Waiting\",\n    \"court\":\"Centro de Deportes\",\n    \"city\":\"Bogotá\",\n    \"sport_id\":1,\n    \"level_id\":1\n}",
+					"raw": "{\n    \"date\":\"01/01/2000\",\n    \"time\":\"11:00-13:00\",\n    \"status\":\"Pending\",\n    \"court\":\"Centro de Deportes\",\n    \"city\":\"Bogotá\",\n    \"sport_id\":1,\n    \"level_id\":1\n}",
 					"options": {
 						"raw": {
 							"language": "json"
