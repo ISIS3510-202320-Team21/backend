@@ -597,6 +597,42 @@
 			"response": []
 		},
 		{
+			"name": "Get matches by sport",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/sports/1/matches",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"sports",
+						"1",
+						"matches"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Get match",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true

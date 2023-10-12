@@ -122,6 +122,13 @@ def read_matches(skip: int = 0, limit: int = 100, db: Session = Depends(get_db))
     matches = controllers.get_matches(db, skip=skip, limit=limit)
     return matches
 
+@app.get("/sports/{sport_id}/matches/", response_model=list[schemas.Match])
+def read_matches_by_sport(sport_id: int, db: Session = Depends(get_db)):
+    db_matches = controllers.get_matches_by_sport(db, sport_id=sport_id)
+    if db_matches is None:
+        raise HTTPException(status_code=404, detail="Matches not found")
+    return db_matches
+
 @app.get("/users/{user_id}/matches/", response_model=list[schemas.Match])
 def read_user_matches(user_id: int, db: Session = Depends(get_db)):
     db_matches = controllers.get_user_matches(db, user_id=user_id)

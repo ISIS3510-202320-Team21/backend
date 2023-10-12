@@ -108,6 +108,9 @@ def update_notification(db: Session, notification_id: int):
 def get_matches(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Match).offset(skip).limit(limit).all()
 
+def get_matches_by_sport(db: Session, sport_id: int):
+    return db.query(models.Match).filter(models.Match.sport_id == sport_id).all()
+
 def create_user_match(db: Session, match: schemas.MatchCreate, user_id: int):
     creationDate = datetime.datetime.now()
     db_match = models.Match(**match.dict(), user_created_id=user_id, creationDate=creationDate)
