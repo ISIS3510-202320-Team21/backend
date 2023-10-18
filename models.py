@@ -14,7 +14,7 @@ class User(Base):
     university = Column(String, index=True)
     bornDate = Column(String, index=True)
     gender = Column(String, index=True)
-    imageUrl = Column(String, index=True, nullable=True)
+    imageUrl = Column(String, nullable=True)
     latitude = Column(String, index=True, nullable=True)
     longitude = Column(String, index=True, nullable=True)
 
