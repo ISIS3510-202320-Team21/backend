@@ -1,8 +1,9 @@
 {
 	"info": {
-		"_postman_id": "db64fac1-4b91-4894-a3b2-c81f922b593e",
+		"_postman_id": "c10a5841-0bba-4151-b86d-6820cbf82342",
 		"name": "Backend moviles",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24301889"
 	},
 	"item": [
 		{
@@ -12,7 +13,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"email\":\"ana@gmail.com\",\n    \"password\":\"password\",\n    \"name\":\"Ana\",\n    \"phoneNumber\":\"1234567890\",\n    \"role\":\"Estudiante\",\n    \"university\":\"Universidad de los Andes\",\n    \"bornDate\":\"01/01/2000\",\n    \"gender\":\"F\"\n}",
+					"raw": "{\n    \"email\":\"j@j.com\",\n    \"password\":\"1\",\n    \"name\":\"Ana\",\n    \"phoneNumber\":\"1234567890\",\n    \"role\":\"Estudiante\",\n    \"university\":\"Universidad de los Andes\",\n    \"bornDate\":\"01/01/2000\",\n    \"gender\":\"F\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -107,7 +108,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"email\":\"ana@gmail.com\",\n    \"password\":\"password\"\n}",
+					"raw": "{\n    \"email\":\"maria@gmail.com\",\n    \"password\":\"password\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -115,13 +116,13 @@
 					}
 				},
 				"url": {
-					"raw": "http://127.0.0.1:8000/login",
+					"raw": "http://192.168.1.20:8000/login",
 					"protocol": "http",
 					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
+						"192",
+						"168",
+						"1",
+						"20"
 					],
 					"port": "8000",
 					"path": [
@@ -259,7 +260,7 @@
 				"method": "PUT",
 				"header": [],
 				"url": {
-					"raw": "http://127.0.0.1:8000/users/1/password/?old_password=password&new_password=password123",
+					"raw": "http://127.0.0.1:8000/users/2/password/?old_password=password&new_password=password123",
 					"protocol": "http",
 					"host": [
 						"127",
@@ -270,7 +271,7 @@
 					"port": "8000",
 					"path": [
 						"users",
-						"1",
+						"2",
 						"password",
 						""
 					],
@@ -289,7 +290,18 @@
 			"response": []
 		},
 		{
-			"name": "Create level",
+			"name": "Create level beginner",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"tests[\"No genera error\"] = responseCode.code === 200;"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -342,13 +354,24 @@
 			"response": []
 		},
 		{
-			"name": "Create sport",
+			"name": "Create sport tennis",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"tests[\"No genera error\"] = responseCode.code === 200;"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"name\":\"Tennis\",\n    \"imageUrl\":\"url\"\n}",
+					"raw": "{\n    \"name\":\"Tennis\",\n    \"imageUrl\":\"https://raw.githubusercontent.com/BraitoRX/I-Like-Data/main/sportsapp/tenis.png\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -502,7 +525,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"date\":\"01/01/2000\",\n    \"time\":\"11:00-13:00\",\n    \"status\":\"Pending\",\n    \"court\":\"Centro de Deportes\",\n    \"city\":\"Bogotá\",\n    \"sport_id\":1,\n    \"level_id\":1\n}",
+					"raw": "{\n    \"date\":\"18/10/2023\",\n    \"time\":\"11:00 - 13:00\",\n    \"status\":\"Pending\",\n    \"court\":\"Centro de Deportes\",\n    \"city\":\"Bogotá\",\n    \"sport_id\":1,\n    \"level_id\":1\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -708,7 +731,14 @@
 			"name": "Rate match",
 			"request": {
 				"method": "PUT",
-				"header": [],
+				"header": [
+					{
+						"key": "a",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					}
+				],
 				"body": {
 					"mode": "raw",
 					"raw": "",
@@ -719,7 +749,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://127.0.0.1:8000/matches/1/rate?rate=1",
+					"raw": "http://127.0.0.1:8000/matches/1/rate?rate=2.5",
 					"protocol": "http",
 					"host": [
 						"127",
@@ -736,7 +766,7 @@
 					"query": [
 						{
 							"key": "rate",
-							"value": "1"
+							"value": "2.5"
 						}
 					]
 				}
@@ -800,7 +830,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://127.0.0.1:8000/genders",
+					"raw": "http://127.0.0.1:8000/genders/",
 					"protocol": "http",
 					"host": [
 						"127",
@@ -810,7 +840,8 @@
 					],
 					"port": "8000",
 					"path": [
-						"genders"
+						"genders",
+						""
 					]
 				}
 			},
@@ -913,6 +944,174 @@
 					"port": "8000",
 					"path": [
 						"cities"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get user most visited sports in the week",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/user/1/most_reserved_sports_this_week",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"user",
+						"1",
+						"most_reserved_sports_this_week"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete notification",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/notifications/1/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"notifications",
+						"1",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete level",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/levels/1/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"levels",
+						"1",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete User 2",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/users/2/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"users",
+						"2",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Match",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/matches/1/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"matches",
+						"1",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Sport",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/sports/1/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"sports",
+						"1",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete User 1",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/users/1/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"users",
+						"1",
+						""
 					]
 				}
 			},

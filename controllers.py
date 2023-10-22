@@ -2,6 +2,7 @@ from sqlalchemy.orm import Session
 import models, schemas
 from sqlalchemy import or_
 import datetime
+from sqlalchemy.orm import joinedload
 
 #login functions
 def login_user(db: Session, email: str, password: str):
@@ -43,6 +44,12 @@ def create_user(db: Session, user: schemas.UserCreate):
     db.commit()
     db.refresh(db_user)
     return db_user
+def get_user_by_id(db: Session, user_id: int):
+    return db.query(models.User).filter(models.User.id == user_id).first()
+
+def delete_user(db: Session, user_db: schemas.User):
+    db.delete(user_db)
+    db.commit()
 
 def update_user_image(db: Session, user_id: int, image: schemas.ImageCreate):
     db_user = db.query(models.User).filter(models.User.id == user_id).first()
@@ -103,7 +110,13 @@ def update_notification(db: Session, notification_id: int):
     db.commit()
     db.refresh(db_notification)
     return db_notification
-
+def delete_notification(db: Session, notification_id: int):
+    db_notification = db.query(models.Notification).filter(models.Notification.id == notification_id).first()
+    if not db_notification:
+        return None
+    db.delete(db_notification)
+    db.commit()
+    return db_notification
 #match functions
 def get_matches(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Match).offset(skip).limit(limit).all()
@@ -118,6 +131,14 @@ def create_user_match(db: Session, match: schemas.MatchCreate, user_id: int):
     db.commit()
     db.refresh(db_match)
     return db_match
+
+def get_match_by_id(db: Session, match_id: int):
+    return db.query(models.Match).options(joinedload(models.Match.sport)).filter(models.Match.id == match_id).first()
+
+def delete_match(db: Session, db_match: schemas.Match):
+    db.delete(db_match)
+    db.commit()
+
 
 def get_user_matches(db: Session, user_id: int):
     return db.query(models.Match).filter(or_(models.Match.user_created_id == user_id, models.Match.user_joined_id == user_id)).all()
@@ -158,9 +179,28 @@ def create_sport(db: Session, sport: schemas.SportCreate):
     db.refresh(db_sport)
     return db_sport
 
+def get_sport_by_id(db: Session, sport_id: int):
+    return db.query(models.Sport).filter(models.Sport.id == sport_id).first()
+
+def delete_sport(db: Session, sport_id: int):
+    db_sport = get_sport_by_id(db, sport_id)
+    if not db_sport:
+        return None
+    db.delete(db_sport)
+    db.commit()
+    return db_sport
+
 #level functions
 def get_levels(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Level).offset(skip).limit(limit).all()
+
+def get_level(db: Session, level_id: int):
+    return db.query(models.Level).filter(models.Level.id == level_id).first()
+
+def delete_level(db: Session, level_id: int):
+    db_level = get_level(db, level_id)
+    db.delete(db_level)
+    db.commit()
 
 def create_level(db: Session, level: schemas.LevelCreate):
     db_level = models.Level(**level.dict())

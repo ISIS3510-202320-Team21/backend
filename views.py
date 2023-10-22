@@ -3,6 +3,10 @@ from sqlalchemy.orm import Session
 from database import SessionLocal, engine
 import controllers, models, schemas
 from fastapi.middleware.cors import CORSMiddleware
+from datetime import datetime, timedelta
+from models import User, Match, Sport
+from sqlalchemy import func, desc, and_
+
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
@@ -85,6 +89,41 @@ def update_user_location(latitude: str, longitude: str, user_id: int, db: Sessio
         raise HTTPException(status_code=404, detail="User not found")
     return db_user
 
+@app.get("/user/{user_id}/most_reserved_sports_this_week")
+def get_most_reserved_sports_this_week(user_id: int, db: Session = Depends(get_db)):
+    today = datetime.now()
+    monday_of_this_week = today - timedelta(days=today.weekday())
+    start_of_week = monday_of_this_week.strftime('%Y-%m-%d %H:%M:%S.%f')
+
+    # Contamos los partidos agrupados por sport_id donde el usuario es creador o participante y fue creado en lo que va de la semana actual
+    sports_counts = (
+        db.query(Match.sport_id, Sport.name, func.count(Match.sport_id).label("count"))
+        .join(Sport, Match.sport_id == Sport.id)
+        .filter(
+            and_(
+                (Match.user_created_id == user_id) | (Match.user_joined_id == user_id),
+                Match.creationDate >= start_of_week
+            )
+        )
+        .group_by(Match.sport_id, Sport.name)
+        .order_by(desc("count"))
+        .limit(2)
+        .all()
+    )
+
+    if not sports_counts:
+        raise HTTPException(status_code=404, detail="Sports not found for the user in this week")
+
+    return sports_counts
+
+@app.delete("/users/{user_id}/", response_model=schemas.User)
+def delete_user(user_id: int, db: Session = Depends(get_db)):
+    db_user = controllers.get_user_by_id(db, user_id=user_id)
+    if db_user is None:
+        raise HTTPException(status_code=404, detail="User not found")
+    controllers.delete_user(db, db_user)
+    return db_user
+
 #notification functions
 @app.post("/users/{user_id}/notifications/", response_model=schemas.Notification)
 def create_notification_for_user(
@@ -107,6 +146,14 @@ def read_user_notifications(user_id: int, db: Session = Depends(get_db)):
 @app.put("/notifications/{notification_id}/", response_model=schemas.Notification)
 def update_notification(notification_id: int, db: Session = Depends(get_db)):
     db_notification = controllers.update_notification(db, notification_id=notification_id)
+    if db_notification is None:
+        raise HTTPException(status_code=404, detail="Notification not found")
+    return db_notification
+
+
+@app.delete("/notifications/{notification_id}/", response_model=schemas.Notification)
+def delete_notification(notification_id: int, db: Session = Depends(get_db)):
+    db_notification = controllers.delete_notification(db, notification_id=notification_id)
     if db_notification is None:
         raise HTTPException(status_code=404, detail="Notification not found")
     return db_notification
@@ -166,6 +213,14 @@ def change_match_status(
 ):
     return controllers.change_match_status(db=db, match_id=match_id, status=status)
 
+@app.delete("/matches/{match_id}/", response_model=schemas.Match)
+def delete_match(match_id: int, db: Session = Depends(get_db)):
+    db_match = controllers.get_match_by_id(db, match_id=match_id)
+    if db_match is None:
+        raise HTTPException(status_code=404, detail="Match not found")
+    controllers.delete_match(db, db_match)
+    return db_match
+
 #sport functions
 @app.post("/sports/", response_model=schemas.Sport)
 def create_sport(sport: schemas.SportCreate, db: Session = Depends(get_db)):
@@ -176,6 +231,14 @@ def read_sports(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     sports = controllers.get_sports(db, skip=skip, limit=limit)
     return sports
 
+@app.delete("/sports/{sport_id}/", response_model=schemas.Sport)
+def delete_sport(sport_id: int, db: Session = Depends(get_db)):
+    db_sport = controllers.delete_sport(db, sport_id=sport_id)
+    if db_sport is None:
+        raise HTTPException(status_code=404, detail="Sport not found")
+    return db_sport
+
+
 #level functions
 @app.post("/levels/", response_model=schemas.Level)
 def create_level(level: schemas.LevelCreate, db: Session = Depends(get_db)):
@@ -185,6 +248,15 @@ def create_level(level: schemas.LevelCreate, db: Session = Depends(get_db)):
 def read_levels(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     levels = controllers.get_levels(db, skip=skip, limit=limit)
     return levels
+
+@app.delete("/levels/{level_id}/", response_model=schemas.Level)
+def delete_level(level_id: int, db: Session = Depends(get_db)):
+    db_level = controllers.get_level(db, level_id=level_id)  # Asume que tienes esta función en tus controllers
+    if db_level is None:
+        raise HTTPException(status_code=404, detail="Level not found")
+    controllers.delete_level(db, level_id=level_id)  # Asume que vas a crear esta función en tus controllers
+    return db_level
+
 
 #university functions
 @app.get("/universities/", response_model=list[str])
