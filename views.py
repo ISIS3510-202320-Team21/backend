@@ -112,7 +112,21 @@ def get_most_reserved_sports_this_week(user_id: int, db: Session = Depends(get_d
     )
 
     if not sports_counts:
-        raise HTTPException(status_code=404, detail="Sports not found for the user in this week")
+        # Si no hay deportes reservados esta semana por el usuario, obtenemos 2 deportes aleatorios
+        random_sports = (
+            db.query(Sport.id, Sport.name)
+            .order_by(func.random())
+            .limit(2)
+            .all()
+        )
+
+        # Verificamos que se hayan obtenido deportes aleatorios
+        if not random_sports:
+            raise HTTPException(status_code=404, detail="No sports available")
+
+        # Añadimos un campo 'count' para mantener una estructura consistente con sports_counts
+        random_sports_counts = [{"sport_id": sport.id, "name": sport.name, "count": 0} for sport in random_sports]
+        return random_sports_counts
 
     return sports_counts
 
