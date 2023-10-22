@@ -1,12 +1,13 @@
-from fastapi import Depends, FastAPI, HTTPException
+from fastapi import Depends, FastAPI, HTTPException, Query
 from sqlalchemy.orm import Session
 from database import SessionLocal, engine
 import controllers, models, schemas
 from fastapi.middleware.cors import CORSMiddleware
-
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
+
+# Deshabilita las redirecciones automáticas para barras al final
 
 app.add_middleware(
     CORSMiddleware,
@@ -143,11 +144,15 @@ def read_match(match_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Match not found")
     return db_match
 
-@app.put("/matches/{match_id}/rate/", response_model=schemas.Match)
+@app.put("/matches/{match_id}/rate")
 def update_match_rate(
-    match_id: int, rate: str, db: Session = Depends(get_db)
+    match_id: int, 
+    rate: float = Query(..., description="Rating for the match"), 
+    db: Session = Depends(get_db)
 ):
     return controllers.add_rate_to_match(db=db, match_id=match_id, rate=rate)
+
+
 
 @app.put("/matches/{match_id}/users/{user_id}/") #, response_model=schemas.Match
 def add_user_to_match(
@@ -155,7 +160,7 @@ def add_user_to_match(
 ):
     return controllers.add_user_to_match(db=db, match_id=match_id, user_id=user_id)
 
-@app.put("/matches/{match_id}/status/", response_model=schemas.Match)
+@app.put("/matches/{match_id}/status", response_model=schemas.Match)
 def change_match_status(
     match_id: int, status: str, db: Session = Depends(get_db)
 ):
