@@ -97,7 +97,7 @@ def get_most_reserved_sports_this_week(user_id: int, db: Session = Depends(get_d
 
     # Contamos los partidos agrupados por sport_id donde el usuario es creador o participante y fue creado en lo que va de la semana actual
     sports_counts = (
-        db.query(Match.sport_id, Sport.name, func.count(Match.sport_id).label("count"))
+        db.query(Match.sport_id.label("id"), Sport.name,Sport.imageUrl, func.count(Match.sport_id).label("count"))
         .join(Sport, Match.sport_id == Sport.id)
         .filter(
             and_(
@@ -105,7 +105,7 @@ def get_most_reserved_sports_this_week(user_id: int, db: Session = Depends(get_d
                 Match.creationDate >= start_of_week
             )
         )
-        .group_by(Match.sport_id, Sport.name)
+        .group_by(Match.sport_id, Sport.name,Sport.imageUrl)
         .order_by(desc("count"))
         .limit(2)
         .all()
@@ -114,7 +114,7 @@ def get_most_reserved_sports_this_week(user_id: int, db: Session = Depends(get_d
     if not sports_counts:
         # Si no hay deportes reservados esta semana por el usuario, obtenemos 2 deportes aleatorios
         random_sports = (
-            db.query(Sport.id, Sport.name)
+            db.query(Sport.id, Sport.name,Sport.imageUrl)
             .order_by(func.random())
             .limit(2)
             .all()
@@ -125,7 +125,7 @@ def get_most_reserved_sports_this_week(user_id: int, db: Session = Depends(get_d
             raise HTTPException(status_code=404, detail="No sports available")
 
         # Añadimos un campo 'count' para mantener una estructura consistente con sports_counts
-        random_sports_counts = [{"sport_id": sport.id, "name": sport.name, "count": 0} for sport in random_sports]
+        random_sports_counts = [{"id": sport.id, "name": sport.name,"imageUrl":sport.imageUrl, "count": 0} for sport in random_sports]
         return random_sports_counts
 
     return sports_counts
