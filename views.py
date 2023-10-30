@@ -6,6 +6,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from datetime import datetime, timedelta
 from models import User, Match, Sport
 from sqlalchemy import func, desc, and_
+from datetime import datetime, timezone
+import schedule
+import time
+import threading
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -95,9 +99,13 @@ def get_most_reserved_sports_this_week(user_id: int, db: Session = Depends(get_d
     monday_of_this_week = today - timedelta(days=today.weekday())
     start_of_week = monday_of_this_week.strftime('%Y-%m-%d %H:%M:%S.%f')
 
-    # Contamos los partidos agrupados por sport_id donde el usuario es creador o participante y fue creado en lo que va de la semana actual
     sports_counts = (
-        db.query(Match.sport_id.label("id"), Sport.name,Sport.imageUrl, func.count(Match.sport_id).label("count"))
+        db.query(
+            Match.sport_id.label("id"),
+            Sport.name,
+            Sport.imageUrl.label("imageUrl"),  
+            func.count(Match.sport_id).label("count")
+        )
         .join(Sport, Match.sport_id == Sport.id)
         .filter(
             and_(
@@ -105,30 +113,29 @@ def get_most_reserved_sports_this_week(user_id: int, db: Session = Depends(get_d
                 Match.creationDate >= start_of_week
             )
         )
-        .group_by(Match.sport_id, Sport.name,Sport.imageUrl)
+        .group_by(Match.sport_id, Sport.name, Sport.imageUrl)  # Incluye Sport.imageUrl en el group_by
         .order_by(desc("count"))
         .limit(2)
         .all()
     )
 
     if not sports_counts:
-        # Si no hay deportes reservados esta semana por el usuario, obtenemos 2 deportes aleatorios
         random_sports = (
-            db.query(Sport.id, Sport.name,Sport.imageUrl)
+            db.query(Sport.id, Sport.name, Sport.imageUrl)  # Añade Sport.imageUrl
             .order_by(func.random())
             .limit(2)
             .all()
         )
 
-        # Verificamos que se hayan obtenido deportes aleatorios
         if not random_sports:
             raise HTTPException(status_code=404, detail="No sports available")
 
-        # Añadimos un campo 'count' para mantener una estructura consistente con sports_counts
-        random_sports_counts = [{"id": sport.id, "name": sport.name,"imageUrl":sport.imageUrl, "count": 0} for sport in random_sports]
+        random_sports_counts = [{"id": sport.id, "name": sport.name, "imageUrl": sport.imageUrl, "count": 0} for sport in random_sports]
         return random_sports_counts
 
-    return sports_counts
+    # Convierte la respuesta a un formato que incluya la URL de la imagen
+    result = [{"id": sport.id, "name": sport.name, "imageUrl": sport.imageUrl, "count": sport.count} for sport in sports_counts]
+    return result
 
 @app.delete("/users/{user_id}/", response_model=schemas.User)
 def delete_user(user_id: int, db: Session = Depends(get_db)):
@@ -295,3 +302,42 @@ def read_genders(db: Session = Depends(get_db)):
 def read_roles(db: Session = Depends(get_db)):
     roles = controllers.get_roles()
     return roles
+
+
+from datetime import datetime, timezone
+import re
+
+# periodic task
+def check_and_update_matches():
+    db = next(get_db())  # Obtén la sesión de la base de datos
+    try:
+        matches = db.query(Match).filter(Match.status == 'Pending').all()
+        for match in matches:
+            # Asumiendo que match.time es una cadena en el formato "HH:MM - HH:MM"
+            start_time = re.match(r'(\d{2}:\d{2}) - \d{2}:\d{2}', match.time).group(1)
+            match_datetime_str = f'{match.date} {start_time}'
+            match_date = datetime.strptime(match_datetime_str, '%d/%m/%Y %H:%M').replace(tzinfo=timezone.utc)
+            
+            if match_date < datetime.now(timezone.utc):
+                match.status = 'Out of Date'
+                db.commit()
+                print(f'Match {match.id} ha sido actualizado a Out of Date')
+    except Exception as e:
+        print('Error al comprobar los partidos:', e)
+    finally:
+        db.close()
+
+
+
+
+
+def run_schedule():
+    schedule.every(10).seconds.do(check_and_update_matches)
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
+
+@app.on_event("startup")
+async def startup_event():
+    thread = threading.Thread(target=run_schedule)
+    thread.start()
