@@ -8,6 +8,9 @@ from models import User, Match, Sport
 from sqlalchemy import func, desc, and_
 from datetime import datetime, timezone
 import schedule
+from fastapi import FastAPI, Depends, HTTPException
+from pydantic import BaseModel
+from sqlalchemy.orm import Session
 import time
 import threading
 
@@ -97,6 +100,8 @@ def update_user_location(latitude: str, longitude: str, user_id: int, db: Sessio
 def get_most_reserved_sports_this_week(user_id: int, db: Session = Depends(get_db)):
     today = datetime.now()
     monday_of_this_week = today - timedelta(days=today.weekday())
+    monday_of_this_week = (today - timedelta(days=today.weekday())).replace(hour=0, minute=0, second=0, microsecond=0)
+
     start_of_week = monday_of_this_week.strftime('%Y-%m-%d %H:%M:%S.%f')
 
     sports_counts = (
@@ -234,13 +239,19 @@ def change_match_status(
 ):
     return controllers.change_match_status(db=db, match_id=match_id, status=status)
 
-@app.delete("/matches/{match_id}/", response_model=schemas.Match)
+
+class MatchDeleteResponse(BaseModel):
+    detail: str
+
+@app.delete("/matches/{match_id}/", response_model=MatchDeleteResponse)
 def delete_match(match_id: int, db: Session = Depends(get_db)):
     db_match = controllers.get_match_by_id(db, match_id=match_id)
     if db_match is None:
         raise HTTPException(status_code=404, detail="Match not found")
     controllers.delete_match(db, db_match)
-    return db_match
+    return MatchDeleteResponse(detail="Match deleted successfully")
+
+
 
 #sport functions
 @app.post("/sports/", response_model=schemas.Sport)
@@ -316,9 +327,8 @@ def check_and_update_matches():
             # Asumiendo que match.time es una cadena en el formato "HH:MM - HH:MM"
             start_time = re.match(r'(\d{2}:\d{2}) - \d{2}:\d{2}', match.time).group(1)
             match_datetime_str = f'{match.date} {start_time}'
-            match_date = datetime.strptime(match_datetime_str, '%d/%m/%Y %H:%M').replace(tzinfo=timezone.utc)
-            
-            if match_date < datetime.now(timezone.utc):
+            match_date = datetime.strptime(match_datetime_str, '%d/%m/%Y %H:%M')
+            if match_date < datetime.now():
                 match.status = 'Out of Date'
                 db.commit()
                 print(f'Match {match.id} ha sido actualizado a Out of Date')
