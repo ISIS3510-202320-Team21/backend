@@ -67,17 +67,20 @@ def update_user_location(db: Session, user_id: int, latitude: str, longitude: st
     return db_user
 
 def update_user(db: Session, user_id: int, user: schemas.UserBase):
-    db_user = db.query(models.User).filter(models.User.id == user_id).first()
-    db_user.email = user.email
-    db_user.name = user.name
-    db_user.phoneNumber = user.phoneNumber
-    db_user.role = user.role
-    db_user.university = user.university
-    db_user.bornDate = user.bornDate
-    db_user.gender = user.gender
-    db.commit()
-    db.refresh(db_user)
-    return db_user
+    try:
+        db_user = db.query(models.User).filter(models.User.id == user_id).first()
+        db_user.email = user.email
+        db_user.name = user.name
+        db_user.phoneNumber = user.phoneNumber
+        db_user.role = user.role
+        db_user.university = user.university
+        db_user.bornDate = user.bornDate
+        db_user.gender = user.gender
+        db.commit()
+        db.refresh(db_user)
+        return db_user
+    except Exception as e:
+        return e.args[0]
 
 def change_password(db: Session, user_id: int, old_password: str, new_password: str):
     db_user = db.query(models.User).filter(models.User.id == user_id).first()

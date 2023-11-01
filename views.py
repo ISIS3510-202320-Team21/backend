@@ -1,4 +1,6 @@
 from fastapi import Depends, FastAPI, HTTPException, Query
+from psycopg2 import IntegrityError
+from psycopg2.errors import UniqueViolation
 from sqlalchemy.orm import Session
 from database import SessionLocal, engine
 import controllers, models, schemas
@@ -71,6 +73,9 @@ def update_user(user: schemas.UserBase, user_id: int, db: Session = Depends(get_
     db_user = controllers.update_user(db, user_id=user_id, user=user)
     if db_user is None:
         raise HTTPException(status_code=404, detail="User not found")
+    elif isinstance(db_user, str):
+        error_message = db_user
+        raise HTTPException(status_code=400, detail=error_message)
     return db_user
 
 @app.put("/users/{user_id}/password/", response_model=schemas.User) #
