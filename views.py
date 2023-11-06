@@ -333,6 +333,8 @@ def check_and_update_matches():
             start_time = re.match(r'(\d{2}:\d{2}) - \d{2}:\d{2}', match.time).group(1)
             match_datetime_str = f'{match.date} {start_time}'
             match_date = datetime.strptime(match_datetime_str, '%d/%m/%Y %H:%M')
+            print(f'Comprobando partido {match.id} con fecha {match_date}')
+            print(f'Fecha actual: {datetime.now()}', end='\n\n')
             if match_date < datetime.now():
                 match.status = 'Out of Date'
                 db.commit()
