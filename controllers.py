@@ -146,6 +146,8 @@ def delete_match(db: Session, db_match: schemas.Match):
 def get_user_matches(db: Session, user_id: int):
     return db.query(models.Match).filter(or_(models.Match.user_created_id == user_id, models.Match.user_joined_id == user_id)).all()
 
+
+
 def add_user_to_match(db: Session, match_id: int, user_id: int):
     db_match = db.query(models.Match).filter(models.Match.id == match_id).first()
     db_match.user_joined_id = user_id
@@ -227,3 +229,17 @@ def get_genders():
 #get cities, this is a list of strings fixed in the code
 def get_cities():
     return ["Bogotá","Medellín","Cali","Barranquilla","Cartagena","Cúcuta","Soledad","Ibagué","Bucaramanga","Soacha","Santa Marta","Villavicencio","Bello","Valledupar","Pereira","Montería","Pasto","Manizales"]
+
+def get_courts():
+    return [
+        "Parque Deportivo Andino",
+        "Complejo Atlético Caribe",
+        "Cancha de Fútbol Cafetero",
+        "Arena Amazonia",
+        "Cancha Valle del Cauca",
+        "Complejo Deportivo Bolívar",
+        "Domo de los Llanos",
+        "Estadio Antioqueño",
+        "Polideportivo Santander",
+        "Coliseo de los Conquistadores"
+    ]

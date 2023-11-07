@@ -1,4 +1,5 @@
-from fastapi import Depends, FastAPI, HTTPException, Query
+import asyncio
+from fastapi import Depends, FastAPI, HTTPException, Query, WebSocketDisconnect
 from psycopg2 import IntegrityError
 from psycopg2.errors import UniqueViolation
 from sqlalchemy.orm import Session
@@ -15,6 +16,7 @@ from pydantic import BaseModel
 from sqlalchemy.orm import Session
 import time
 import threading
+from fastapi import WebSocket
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -215,6 +217,20 @@ def read_user_matches(user_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Matches not found")
     return db_matches
 
+from pydantic import parse_obj_as
+
+@app.websocket("/ws/matches/{user_id}")
+async def matches_websocket(websocket: WebSocket, user_id: int, db: Session = Depends(get_db)):
+    await websocket.accept()
+    try:
+        while True:
+            matches = controllers.get_user_matches(db, user_id=user_id)
+            pydantic_matches = parse_obj_as(list[schemas.Match], matches)
+            data = [match.dict() for match in pydantic_matches]
+            await websocket.send_json(data)
+    except WebSocketDisconnect:
+        print(f"WebSocket disconnected for user {user_id}")
+
 @app.get("/matches/{match_id}", response_model=schemas.Match)
 def read_match(match_id: int, db: Session = Depends(get_db)):
     db_match = controllers.get_match(db, match_id=match_id)
@@ -319,7 +335,17 @@ def read_roles(db: Session = Depends(get_db)):
     roles = controllers.get_roles()
     return roles
 
+#get cities
+@app.get("/cities/", response_model=list[str])
+def read_cities(db: Session = Depends(get_db)):
+    cities = controllers.get_cities()
+    return cities
 
+#get courts
+@app.get("/courts/", response_model=list[str])
+def read_courts(db: Session = Depends(get_db)):
+    courts = controllers.get_courts()
+    return courts
 from datetime import datetime, timezone
 import re
 
@@ -333,8 +359,6 @@ def check_and_update_matches():
             start_time = re.match(r'(\d{2}:\d{2}) - \d{2}:\d{2}', match.time).group(1)
             match_datetime_str = f'{match.date} {start_time}'
             match_date = datetime.strptime(match_datetime_str, '%d/%m/%Y %H:%M')
-            print(f'Comprobando partido {match.id} con fecha {match_date}')
-            print(f'Fecha actual: {datetime.now()}', end='\n\n')
             if match_date < datetime.now():
                 match.status = 'Out of Date'
                 db.commit()
@@ -343,6 +367,8 @@ def check_and_update_matches():
         print('Error al comprobar los partidos:', e)
     finally:
         db.close()
+
+
 
 
 
