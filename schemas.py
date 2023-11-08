@@ -103,11 +103,20 @@ class Match(MatchBase):
     class Config:
         orm_mode = True
 
-class Claim(BaseModel):
 
+
+
+#Claim schemas
+class ClaimBase(BaseModel):
     user_created_id: int = None
     content: str = None
 
-class ClaimResponse(Claim):
+class ClaimCreate(ClaimBase):
+    pass
+
+class Claim(ClaimBase):
     id: int
     user_created: User = None
+
+    class Config:
+        orm_mode = True
