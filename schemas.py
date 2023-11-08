@@ -110,3 +110,4 @@ class Claim(BaseModel):
 
 class ClaimResponse(Claim):
     id: int
+    user_created: User = None

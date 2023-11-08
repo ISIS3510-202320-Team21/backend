@@ -21,6 +21,7 @@ class User(Base):
     notifications = relationship("Notification", back_populates="owner")
 
     matchesCreated = relationship("Match", foreign_keys="[Match.user_created_id]", back_populates="user_created")
+    claimsCreated = relationship("Claim", foreign_keys="[Claim.user_created_id]", back_populates="user_created")
     matchesJoined = relationship("Match", foreign_keys="[Match.user_joined_id]", back_populates="user_joined")
 
 class Notification(Base):
@@ -81,3 +82,5 @@ class Claim(Base):
     id = Column(Integer, primary_key=True, index=True)
     user_created_id = Column(Integer, ForeignKey("users.id"))
     content = Column(String)
+
+    user_created = relationship("User", foreign_keys=[user_created_id], back_populates="claimsCreated")
