@@ -77,7 +77,7 @@ def update_user(user: schemas.UserBase, user_id: int, db: Session = Depends(get_
         raise HTTPException(status_code=404, detail="User not found")
     elif isinstance(db_user, str):
         error_message = db_user
-        raise HTTPException(status_code=400, detail=error_message)
+        raise HTTPException(status_code=400, detail="Email already registered")
     return db_user
 
 @app.put("/users/{user_id}/password/", response_model=schemas.User) #
@@ -103,7 +103,7 @@ def update_user_location(latitude: str, longitude: str, user_id: int, db: Sessio
         raise HTTPException(status_code=404, detail="User not found")
     return db_user
 
-@app.get("/user/{user_id}/most_reserved_sports_this_week")
+@app.get("/user/{user_id}/most_reserved_sports_this_week/")
 def get_most_reserved_sports_this_week(user_id: int, db: Session = Depends(get_db)):
     today = datetime.now()
     monday_of_this_week = today - timedelta(days=today.weekday())
