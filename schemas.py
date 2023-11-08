@@ -97,6 +97,7 @@ class Match(MatchBase):
     sport: Sport = None
     level: Level = None
     user_joined: User = None
+    user_created: User = None
 
     class Config:
         orm_mode = True
