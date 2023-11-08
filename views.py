@@ -389,7 +389,7 @@ async def startup_event():
 # Claim endpoint
 @app.post("/claims/", response_model=schemas.Claim) #
 def create_claim(claim: schemas.Claim, db: Session = Depends(get_db)):
-    return controllers.create_user(db=db, claim=claim)
+    return controllers.create_claim(db=db, claim=claim)
 
 @app.get("/claims/", response_model=list[schemas.Claim]) #
 def read_claims(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
