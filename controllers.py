@@ -256,7 +256,6 @@ def get_claims(db: Session, skip: int = 0, limit: int = 100):
 
 def create_claim(db: Session, claim: schemas.Claim):
     db_claim = models.Claim(
-        id = claim.id,
         user_created_id = claim.user_created_id,
         content = claim.content)
     db.add(db_claim)
