@@ -105,6 +105,5 @@ class Match(MatchBase):
 
 class Claim(BaseModel):
 
-    id: int
     user_created_id: int = None
     content: str = None
