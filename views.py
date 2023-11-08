@@ -242,9 +242,10 @@ def read_match(match_id: int, db: Session = Depends(get_db)):
 def update_match_rate(
     match_id: int, 
     rate: float = Query(..., description="Rating for the match"), 
+    is_user_created: bool = Query(..., description="Flag indicating if the user created the match"),
     db: Session = Depends(get_db)
 ):
-    return controllers.add_rate_to_match(db=db, match_id=match_id, rate=rate)
+    return controllers.add_rate_to_match(db=db, match_id=match_id, rate=rate, is_user_created=is_user_created)
 
 
 

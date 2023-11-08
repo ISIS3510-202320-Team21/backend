@@ -92,7 +92,8 @@ class User(UserBase):
 class Match(MatchBase):
     id: int
     creationDate: str = None
-    rate: str = None
+    rate1: str = None
+    rate2: str = None
     user_created_id: int = None
     sport: Sport = None
     level: Level = None

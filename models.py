@@ -42,7 +42,8 @@ class Match(Base):
     id = Column(Integer, primary_key=True, index=True)
     date = Column(String, index=True)
     time = Column(String, index=True)
-    rate = Column(String, index=True)
+    rate1 = Column(String, index=True)
+    rate2 = Column(String, index=True)
     status = Column(String, index=True)
     court = Column(String, index=True)
     city = Column(String, index=True)
@@ -54,6 +55,7 @@ class Match(Base):
 
     sport = relationship("Sport", back_populates="matches")
     level = relationship("Level", back_populates="matches")
+    
     user_created = relationship("User", foreign_keys=[user_created_id], back_populates="matchesCreated")
     user_joined = relationship("User", foreign_keys=[user_joined_id], back_populates="matchesJoined")
 

@@ -159,9 +159,12 @@ def add_user_to_match(db: Session, match_id: int, user_id: int):
 def get_match(db: Session, match_id: int):
     return db.query(models.Match).filter(models.Match.id == match_id).first()
 
-def add_rate_to_match(db: Session, match_id: int, rate: str):
+def add_rate_to_match(db: Session, match_id: int, rate: str,is_user_created: bool):
     db_match = db.query(models.Match).filter(models.Match.id == match_id).first()
-    db_match.rate = rate
+    if is_user_created:
+        db_match.rate1 = rate
+    else:
+        db_match.rate2 = rate
     db.commit()
     db.refresh(db_match)
     return db_match
