@@ -102,3 +102,9 @@ class Match(MatchBase):
 
     class Config:
         orm_mode = True
+
+class Claim(BaseModel):
+
+    id: int
+    user_created_id: int = None
+    content: str = None

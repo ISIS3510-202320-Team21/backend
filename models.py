@@ -74,3 +74,10 @@ class Level(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, index=True)
     matches = relationship("Match", back_populates="level")
+
+class Claim(Base):
+    _tablename_ = "claims"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_created_id = Column(Integer, ForeignKey("users.id"))
+    content = Column(String)

@@ -385,3 +385,20 @@ def run_schedule():
 async def startup_event():
     thread = threading.Thread(target=run_schedule)
     thread.start()
+
+# Claim endpoint
+@app.post("/claims/", response_model=schemas.Claim) #
+def create_claim(claim: schemas.Claim, db: Session = Depends(get_db)):
+    return controllers.create_user(db=db, claim=claim)
+
+@app.get("/claims/", response_model=list[schemas.Claim]) #
+def read_claims(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    claims = controllers.get_claims(db, skip=skip, limit=limit)
+    return claims
+
+@app.get("/claims/{claim_id}", response_model=schemas.Claim) #
+def read_claim(claim_id: int, db: Session = Depends(get_db)):
+    db_claim = controllers.get_claim(db, claim_id=claim_id)
+    if db_claim is None:
+        raise HTTPException(status_code=404, detail="Claim not found")
+    return db_claim

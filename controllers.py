@@ -246,3 +246,20 @@ def get_courts():
         "Polideportivo Santander",
         "Coliseo de los Conquistadores"
     ]
+
+# Claim services
+def get_claim(db: Session, claim_id: int):
+    return db.query(models.Claim).filter(models.Claim.id == claim_id).first()
+
+def get_claims(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(models.Claim).offset(skip).limit(limit).all()
+
+def create_claim(db: Session, claim: schemas.Claim):
+    db_claim = models.Claim(
+        id = claim.id,
+        user_created_id = claim.user_created_id,
+        content = claim.content)
+    db.add(db_claim)
+    db.commit()
+    db.refresh(db_claim)
+    return db_claim
