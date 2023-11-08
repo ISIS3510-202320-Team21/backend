@@ -107,7 +107,7 @@ def update_user_location(latitude: str, longitude: str, user_id: int, db: Sessio
 def get_most_reserved_sports_this_week(user_id: int, db: Session = Depends(get_db)):
     today = datetime.now()
     monday_of_this_week = today - timedelta(days=today.weekday())
-    monday_of_this_week = (today - timedelta(days=today.weekday())).replace(hour=0, minute=0, second=0, microsecond=0)
+    monday_of_this_week = monday_of_this_week.replace(hour=0, minute=0, second=0, microsecond=0)
 
     start_of_week = monday_of_this_week.strftime('%Y-%m-%d %H:%M:%S.%f')
 
@@ -115,7 +115,7 @@ def get_most_reserved_sports_this_week(user_id: int, db: Session = Depends(get_d
         db.query(
             Match.sport_id.label("id"),
             Sport.name,
-            Sport.imageUrl.label("imageUrl"),  
+            Sport.imageUrl.label("imageUrl"),
             func.count(Match.sport_id).label("count")
         )
         .join(Sport, Match.sport_id == Sport.id)
@@ -125,15 +125,16 @@ def get_most_reserved_sports_this_week(user_id: int, db: Session = Depends(get_d
                 Match.creationDate >= start_of_week
             )
         )
-        .group_by(Match.sport_id, Sport.name, Sport.imageUrl)  # Incluye Sport.imageUrl en el group_by
+        .group_by(Match.sport_id, Sport.name, Sport.imageUrl)
         .order_by(desc("count"))
         .limit(2)
         .all()
     )
 
     if not sports_counts:
+        # No sports reserved this week, return two random sports
         random_sports = (
-            db.query(Sport.id, Sport.name, Sport.imageUrl)  # Añade Sport.imageUrl
+            db.query(Sport.id, Sport.name, Sport.imageUrl)
             .order_by(func.random())
             .limit(2)
             .all()
@@ -142,12 +143,22 @@ def get_most_reserved_sports_this_week(user_id: int, db: Session = Depends(get_d
         if not random_sports:
             raise HTTPException(status_code=404, detail="No sports available")
 
-        random_sports_counts = [{"id": sport.id, "name": sport.name, "imageUrl": sport.imageUrl, "count": 0} for sport in random_sports]
-        return random_sports_counts
+        return [{"id": sport.id, "name": sport.name, "imageUrl": sport.imageUrl, "count": 0} for sport in random_sports]
 
-    # Convierte la respuesta a un formato que incluya la URL de la imagen
-    result = [{"id": sport.id, "name": sport.name, "imageUrl": sport.imageUrl, "count": sport.count} for sport in sports_counts]
-    return result
+    # If there is only one most reserved sport, get another random sport
+    if len(sports_counts) == 1:
+        most_reserved_sport_id = sports_counts[0].id
+        random_sport = (
+            db.query(Sport.id, Sport.name, Sport.imageUrl)
+            .filter(Sport.id != most_reserved_sport_id)
+            .order_by(func.random())
+            .first()
+        )
+        if random_sport:
+            sports_counts.append(random_sport)
+
+    return [{"id": sport.id, "name": sport.name, "imageUrl": sport.imageUrl, "count": getattr(sport, 'count', 0)} for sport in sports_counts]
+
 
 @app.delete("/users/{user_id}/", response_model=schemas.User)
 def delete_user(user_id: int, db: Session = Depends(get_db)):
