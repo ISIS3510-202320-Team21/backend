@@ -20,6 +20,11 @@ You will also need postgres running on the background for the app to work. If yo
 The postgres database name for default is sportpal_db, the username is postgres and the password 1234. To create the database you can do this:
 
 ```
+#Ubuntu
+sudo -i -u postgres
+psql
+
+#Windows
 psql -U postgres
 postgres# CREATE DATABASE sportpal_db OWNER postgres;
 postgres# ALTER USER postgres WITH PASSWORD '1234';
