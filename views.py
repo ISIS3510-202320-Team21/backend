@@ -276,12 +276,12 @@ def change_match_status(
 class MatchDeleteResponse(BaseModel):
     detail: str
 
-@app.delete("/matches/{match_id}/", response_model=MatchDeleteResponse)
+@app.put("/matches/{match_id}/", response_model=MatchDeleteResponse)
 def delete_match(match_id: int, db: Session = Depends(get_db)):
     db_match = controllers.get_match_by_id(db, match_id=match_id)
     if db_match is None:
         raise HTTPException(status_code=404, detail="Match not found")
-    controllers.delete_match(db, db_match)
+    controllers.change_match_status(db=db, match_id=match_id, status="Deleted")
     return MatchDeleteResponse(detail="Match deleted successfully")
 
 
