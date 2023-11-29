@@ -228,19 +228,7 @@ def read_user_matches(user_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Matches not found")
     return db_matches
 
-from pydantic import parse_obj_as
 
-@app.websocket("/ws/matches/{user_id}")
-async def matches_websocket(websocket: WebSocket, user_id: int, db: Session = Depends(get_db)):
-    await websocket.accept()
-    try:
-        while True:
-            matches = controllers.get_user_matches(db, user_id=user_id)
-            pydantic_matches = parse_obj_as(list[schemas.Match], matches)
-            data = [match.dict() for match in pydantic_matches]
-            await websocket.send_json(data)
-    except WebSocketDisconnect:
-        print(f"WebSocket disconnected for user {user_id}")
 
 @app.get("/matches/{match_id}", response_model=schemas.Match)
 def read_match(match_id: int, db: Session = Depends(get_db)):

@@ -133,10 +133,20 @@ def create_user_match(db: Session, match: schemas.MatchCreate, user_id: int):
     db.add(db_match)
     db.commit()
     db.refresh(db_match)
-    return db_match
+    return db.query(models.Match)\
+        .options(joinedload(models.Match.sport))\
+        .options(joinedload(models.Match.user_created))\
+        .options(joinedload(models.Match.user_joined))\
+        .options(joinedload(models.Match.level))\
+        .filter(models.Match.id == db_match.id).first()
 
 def get_match_by_id(db: Session, match_id: int):
-    return db.query(models.Match).options(joinedload(models.Match.sport)).filter(models.Match.id == match_id).first()
+    return db.query(models.Match)\
+        .options(joinedload(models.Match.sport))\
+        .options(joinedload(models.Match.user_created))\
+        .options(joinedload(models.Match.user_joined))\
+        .options(joinedload(models.Match.level))\
+        .filter(models.Match.id == match_id).first()
 
 def delete_match(db: Session, db_match: schemas.Match):
     db.delete(db_match)
