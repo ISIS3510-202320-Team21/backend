@@ -164,7 +164,12 @@ def add_user_to_match(db: Session, match_id: int, user_id: int):
     db_match.status = "Approved"
     db.commit()
     db.refresh(db_match)
-    return db_match
+    return db.query(models.Match)\
+        .options(joinedload(models.Match.sport))\
+        .options(joinedload(models.Match.user_created))\
+        .options(joinedload(models.Match.user_joined))\
+        .options(joinedload(models.Match.level))\
+        .filter(models.Match.id == db_match.id).first()
 
 def get_match(db: Session, match_id: int):
     return db.query(models.Match).filter(models.Match.id == match_id).first()
