@@ -1,5 +1,7 @@
 # Backend instructions
 
+si no sirve el pip3 instal -r requirements.txt -> sudo apt-get install libpq-dev
+
 Create a Python 3.9 virtual environment to make it work!"
 ```
 python3.9 -m venv nombre_del_entorno
