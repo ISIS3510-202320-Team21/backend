@@ -159,6 +159,24 @@ def get_most_reserved_sports_this_week(user_id: int, db: Session = Depends(get_d
 
     return [{"id": sport.id, "name": sport.name, "imageUrl": sport.imageUrl, "count": getattr(sport, 'count', 0)} for sport in sports_counts]
 
+@app.get("/users/{user_id}/matches/count-by-sport")
+def read_user_matches_count_by_sport(
+    user_id: int, 
+    start_date: datetime = Query(None), 
+    end_date: datetime = Query(None), 
+    db: Session = Depends(get_db)
+):
+    try:
+        if start_date is None:
+            start_date = datetime.min
+        if end_date is None:
+            end_date = datetime.now()
+
+        matches_count = controllers.get_user_matches_count_by_sport(db, user_id, start_date, end_date)
+        return matches_count
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
 
 @app.delete("/users/{user_id}/", response_model=schemas.User)
 def delete_user(user_id: int, db: Session = Depends(get_db)):
@@ -401,3 +419,4 @@ def read_claim(claim_id: int, db: Session = Depends(get_db)):
     if db_claim is None:
         raise HTTPException(status_code=404, detail="Claim not found")
     return db_claim
+

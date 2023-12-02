@@ -3,7 +3,7 @@ import models, schemas
 from sqlalchemy import or_
 import datetime
 from sqlalchemy.orm import joinedload
-
+from sqlalchemy import func
 #login functions
 def login_user(db: Session, email: str, password: str):
     db_user = db.query(models.User).filter(models.User.email == email).first()
@@ -284,3 +284,24 @@ def create_claim(db: Session, claim: schemas.ClaimCreate):
     db.commit()
     db.refresh(db_claim)
     return db_claim
+
+
+def get_user_matches_count_by_sport(db: Session, user_id: int, start_date: datetime, end_date: datetime):
+    # Asegúrate de que las fechas están en formato de cadena de texto que coincida con tu base de datos.
+    start_date_str = start_date.strftime('%Y-%m-%d %H:%M:%S')
+    end_date_str = end_date.strftime('%Y-%m-%d %H:%M:%S')
+
+    return (
+        db.query(models.Sport.name, models.Sport.imageUrl, func.count(models.Match.id).label('match_count'))
+        .join(models.Match, models.Sport.id == models.Match.sport_id)
+        .filter(
+            (models.Match.user_created_id == user_id) | 
+            (models.Match.user_joined_id == user_id), 
+            # Usa las cadenas de texto para la comparación
+            models.Match.creationDate.between(start_date_str, end_date_str),
+            models.Match.status != "Deleted"
+        )
+        .group_by(models.Sport.name, models.Sport.imageUrl)
+        .all()
+    )
+
