@@ -298,7 +298,7 @@ def get_user_matches_count_by_sport(db: Session, user_id: int, start_date: datet
             (models.Match.user_created_id == user_id) | 
             (models.Match.user_joined_id == user_id), 
             # Usa las cadenas de texto para la comparación
-            models.Match.creationDate.between(start_date_str, end_date_str),
+            models.Match.date.between(start_date_str, end_date_str),
             models.Match.status != "Deleted"
         )
         .group_by(models.Sport.name, models.Sport.imageUrl)
