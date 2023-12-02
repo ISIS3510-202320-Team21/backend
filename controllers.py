@@ -288,11 +288,13 @@ def create_claim(db: Session, claim: schemas.ClaimCreate):
 
 def get_user_matches_count_by_sport(db: Session, user_id: int, start_date: datetime, end_date: datetime):
     # Asegúrate de que las fechas están en formato de cadena de texto que coincida con tu base de datos.
-    start_date_str = start_date.strftime('%Y-%m-%d %H:%M:%S')
-    end_date_str = end_date.strftime('%Y-%m-%d %H:%M:%S')
+    start_date_str = start_date.strftime('%d/%m/%Y')
+    end_date_str = end_date.strftime('%d/%m/%Y')
+    print(start_date_str)
+    print(end_date_str)
 
     return (
-        db.query(models.Sport.name, models.Sport.imageUrl, func.count(models.Match.id).label('match_count'))
+        db.query(models.Sport.name, models.Sport.imageUrl, func.count(models.Match.id).label('match_count'),models.Match.date, models.Match.user_created_id, models.Match.user_joined_id)
         .join(models.Match, models.Sport.id == models.Match.sport_id)
         .filter(
             (models.Match.user_created_id == user_id) | 
@@ -301,7 +303,7 @@ def get_user_matches_count_by_sport(db: Session, user_id: int, start_date: datet
             models.Match.date.between(start_date_str, end_date_str),
             models.Match.status != "Deleted"
         )
-        .group_by(models.Sport.name, models.Sport.imageUrl)
+        .group_by(models.Sport.name, models.Sport.imageUrl,models.Match.date, models.Match.user_created_id, models.Match.user_joined_id)
         .all()
     )
 
