@@ -17,6 +17,8 @@ from sqlalchemy.orm import Session
 import time
 import threading
 from fastapi import WebSocket
+from datetime import datetime, timedelta
+import re
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -365,8 +367,7 @@ def read_courts(db: Session = Depends(get_db)):
     courts = controllers.get_courts()
     return courts
 
-from datetime import datetime, timedelta
-import re
+
 
 def check_and_update_matches():
     db = next(get_db())  # Obtén la sesión de la base de datos
@@ -380,13 +381,11 @@ def check_and_update_matches():
                 continue
 
             start_hours, start_minutes = map(int, start_time_match.groups())
-            print(f"El partido ID {match.id} tiene hora {start_hours}:{start_minutes}")
             # Sumamos esas horas y minutos al objeto datetime inicial
             match_datetime = match.date + timedelta(hours=start_hours, minutes=start_minutes)
 
             # Ahora verifica si el tiempo del partido ya pasó
             if match_datetime < datetime.now():
-                print(f"El partido ID {match.id} ya pasó, actualizando estado...")
                 match.status = 'Out of Date'
                 db.commit()
     except Exception as e:
