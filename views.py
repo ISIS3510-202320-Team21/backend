@@ -175,8 +175,10 @@ def read_user_matches_count_by_sport(
             end_date = datetime.now()
 
         matches_count = controllers.get_user_matches_count_by_sport(db, user_id, start_date, end_date)
+
         return matches_count
     except Exception as e:
+        print(e)
         raise HTTPException(status_code=500, detail=str(e))
 
 
