@@ -364,20 +364,29 @@ def read_cities(db: Session = Depends(get_db)):
 def read_courts(db: Session = Depends(get_db)):
     courts = controllers.get_courts()
     return courts
-from datetime import datetime, timezone
+
+from datetime import datetime, timedelta
 import re
 
-# periodic task
 def check_and_update_matches():
     db = next(get_db())  # Obtén la sesión de la base de datos
     try:
         matches = db.query(Match).filter(Match.status == 'Pending').all()
         for match in matches:
-            # Asumiendo que match.time es una cadena en el formato "HH:MM - HH:MM"
-            start_time = re.match(r'(\d{2}:\d{2}) - \d{2}:\d{2}', match.time).group(1)
-            match_datetime_str = f'{match.date} {start_time}'
-            match_date = datetime.strptime(match_datetime_str, '%d-%m-%Y %H:%M')  
-            if match_date < datetime.now():
+            # Extraemos las horas y minutos de match.time
+            start_time_match = re.match(r'(\d{2}):(\d{2})', match.time)
+            if not start_time_match:
+                print(f"El formato de la hora del partido ID {match.id} no es válido.")
+                continue
+
+            start_hours, start_minutes = map(int, start_time_match.groups())
+            print(f"El partido ID {match.id} tiene hora {start_hours}:{start_minutes}")
+            # Sumamos esas horas y minutos al objeto datetime inicial
+            match_datetime = match.date + timedelta(hours=start_hours, minutes=start_minutes)
+
+            # Ahora verifica si el tiempo del partido ya pasó
+            if match_datetime < datetime.now():
+                print(f"El partido ID {match.id} ya pasó, actualizando estado...")
                 match.status = 'Out of Date'
                 db.commit()
     except Exception as e:
