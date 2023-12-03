@@ -1,4 +1,5 @@
 from typing import Union
+from datetime import datetime
 from pydantic import BaseModel
 
 #create sport model
@@ -48,7 +49,7 @@ class Notification(NotificationBase):
 
 #match model
 class MatchBase(BaseModel):
-    date: str
+    date: datetime
     time: str
     status: str
     court: str

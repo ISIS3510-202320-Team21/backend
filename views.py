@@ -376,11 +376,10 @@ def check_and_update_matches():
             # Asumiendo que match.time es una cadena en el formato "HH:MM - HH:MM"
             start_time = re.match(r'(\d{2}:\d{2}) - \d{2}:\d{2}', match.time).group(1)
             match_datetime_str = f'{match.date} {start_time}'
-            match_date = datetime.strptime(match_datetime_str, '%d/%m/%Y %H:%M')
+            match_date = datetime.strptime(match_datetime_str, '%d-%m-%Y %H:%M')  
             if match_date < datetime.now():
                 match.status = 'Out of Date'
                 db.commit()
-                print(f'Match {match.id} ha sido actualizado a Out of Date')
     except Exception as e:
         print('Error al comprobar los partidos:', e)
     finally:

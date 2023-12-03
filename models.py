@@ -1,4 +1,4 @@
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String
+from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, DateTime
 from sqlalchemy.orm import relationship
 from database import Base
 
@@ -41,7 +41,7 @@ class Match(Base):
     __tablename__ = "matches"
 
     id = Column(Integer, primary_key=True, index=True)
-    date = Column(String, index=True)
+    date = Column(DateTime, index=True)
     time = Column(String, index=True)
     rate1 = Column(String, index=True)
     rate2 = Column(String, index=True)
